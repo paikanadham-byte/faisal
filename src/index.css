@@ -143,6 +143,23 @@ p {
   flex: 1;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.app-container::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(22, 119, 200, 0.11) 0 0.4rem, transparent 0.45rem 100%),
+    radial-gradient(circle at 78% 30%, rgba(15, 157, 117, 0.11) 0 0.5rem, transparent 0.55rem 100%),
+    radial-gradient(circle at 34% 72%, rgba(22, 119, 200, 0.08) 0 0.32rem, transparent 0.36rem 100%),
+    radial-gradient(circle at 66% 82%, rgba(15, 157, 117, 0.08) 0 0.38rem, transparent 0.42rem 100%),
+    linear-gradient(120deg, transparent 0 47%, rgba(22, 119, 200, 0.06) 47.4%, transparent 47.8%),
+    linear-gradient(300deg, transparent 0 50%, rgba(15, 157, 117, 0.055) 50.4%, transparent 50.8%);
+  opacity: 0.9;
 }
 
 .content-section {
@@ -2128,8 +2145,8 @@ body::before {
   width: 22rem;
   height: 22rem;
   background:
-    radial-gradient(circle at 35% 35%, rgba(22, 119, 200, 0.12), transparent 55%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(22, 119, 200, 0.05));
+    radial-gradient(circle at 35% 35%, rgba(22, 119, 200, 0.2), transparent 58%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.26), rgba(22, 119, 200, 0.08));
 }
 
 body::after {
@@ -2137,8 +2154,8 @@ body::after {
   width: 24rem;
   height: 24rem;
   background:
-    radial-gradient(circle at 60% 40%, rgba(15, 157, 117, 0.14), transparent 55%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(15, 157, 117, 0.05));
+    radial-gradient(circle at 60% 40%, rgba(15, 157, 117, 0.22), transparent 58%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(15, 157, 117, 0.08));
 }
 
 h1,
@@ -2328,6 +2345,15 @@ h1 {
   padding: 0.75rem 1rem 0.25rem;
 }
 
+.hero-brand-logo {
+  width: min(100%, 28rem);
+  height: auto;
+  display: block;
+  mix-blend-mode: multiply;
+  filter: saturate(1.04) contrast(1.04);
+  object-fit: contain;
+}
+
 .hero-brand-stats,
 .showcase-metrics {
   display: grid;
@@ -2384,6 +2410,7 @@ h1 {
   color: var(--text-secondary);
   font-size: 1rem;
   line-height: 1.7;
+  text-wrap: balance;
 }
 
 .hero-brand-orb {
@@ -2396,21 +2423,21 @@ h1 {
   inset: 14% auto auto 8%;
   width: 180px;
   height: 180px;
-  background: rgba(22, 119, 200, 0.1);
+  background: rgba(22, 119, 200, 0.16);
 }
 
 .hero-brand-orb-2 {
   inset: auto 5% 8% auto;
   width: 220px;
   height: 220px;
-  background: rgba(15, 157, 117, 0.11);
+  background: rgba(15, 157, 117, 0.17);
 }
 
 .hero-brand-orb-3 {
   inset: auto 10% 14% auto;
   width: 190px;
   height: 190px;
-  background: rgba(22, 119, 200, 0.07);
+  background: rgba(22, 119, 200, 0.12);
 }
 
 .hero-badge-clean,

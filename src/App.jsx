@@ -1971,10 +1971,7 @@ function App() {
                   <div className="hero-brand-layout hero-brand-layout-single">
                     <div className="hero-brand-content">
                       <span className="hero-brand-kicker">{t.brandSub}</span>
-                      <div className="hero-brand-wordmark">
-                        <span>{t.brandName}</span>
-                        <strong>CNP</strong>
-                      </div>
+                      <img src="/logo.png" alt="Cure Net logo" className="hero-brand-logo" />
                       <p className="hero-brand-copy">
                         {ui.home.heroBrandCopy}
                       </p>
