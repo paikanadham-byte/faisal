@@ -25,7 +25,8 @@ import {
   Info, 
   Lock,
   ArrowRight,
-  RefreshCw
+  RefreshCw,
+  ShieldCheck
 } from 'lucide-react';
 
 // Bilingual Translations Dictionary (English, Dari/Persian, Pashto)
@@ -188,6 +189,34 @@ const CLINICAL_DIAGNOSTICS = [
   { id: "infection", label: "Bacterial Diarrhea", disease: "Amoebic Dysentery & Parasites", description: "Stomach cramping, severe diarrhea, microbial infection, or dental abscesses.", medicines: [4, 15, 24], confidence: "97% Match" },
   { id: "fatigue", label: "Fatigue & Anemia", disease: "Iron-Deficiency Anemia & Weakness", description: "Dizziness, persistent tiredness, poor mental focus, pale skin, or general lethargy.", medicines: [9, 12, 19, 20], confidence: "93% Match" }
 ];
+
+const getCategoryVisual = (category) => {
+  if (category.includes("Analgesic")) {
+    return { Icon: Activity, tone: "emerald", label: "Pain Relief" };
+  }
+
+  if (category.includes("Respiratory")) {
+    return { Icon: Sparkles, tone: "sky", label: "Respiratory Care" };
+  }
+
+  if (category.includes("Gastrointestinal")) {
+    return { Icon: Layers, tone: "gold", label: "Digestive Support" };
+  }
+
+  if (category.includes("Vitamins")) {
+    return { Icon: CheckCircle, tone: "teal", label: "Daily Wellness" };
+  }
+
+  if (category.includes("Anti-infective")) {
+    return { Icon: ShieldCheck, tone: "violet", label: "Infection Control" };
+  }
+
+  if (category.includes("Urinary")) {
+    return { Icon: MapPin, tone: "rose", label: "Targeted Relief" };
+  }
+
+  return { Icon: TrendingUp, tone: "slate", label: "Clinical Care" };
+};
 
 // Initial mock orders to populate the admin dashboard dynamically
 const INITIAL_ORDERS = [
@@ -387,8 +416,8 @@ function App() {
     const map = L.map(mapRef.current).setView([gpsCoords.lat, gpsCoords.lng], 12);
     mapInstanceRef.current = map;
 
-    // Dark-slate themed map tiles from CartoDB to fit premium aesthetics
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    // Clean light map tiles to match the refreshed interface
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains: 'abcd',
       maxZoom: 20
@@ -895,7 +924,7 @@ function App() {
   const categories = ['All', 'New Products', ...new Set(products.map(p => p.category))];
 
   return (
-    <div className="app-container">
+    <div className={`app-container lang-${lang} ${lang === 'en' ? '' : 'is-rtl'}`.trim()}>
       {/* Navbar Header */}
       <header className="navbar" style={{ direction: lang === 'en' ? 'ltr' : 'rtl' }}>
         <div className="navbar-container">
@@ -979,17 +1008,29 @@ function App() {
                 </div>
               </div>
               <div className="hero-visual">
-                <img 
-                  src="https://images.unsplash.com/photo-1579165466521-35b91790b74d?auto=format&fit=crop&q=80&w=800" 
-                  className="hero-img" 
-                  alt="Modern Pharmaceutical Research Lab" 
-                />
-                <div className="hero-overlay">
-                  <div className="hero-badge">
-                    <Activity size={24} className="text-primary" />
-                    <div>
-                      <div className="hero-badge-title">{TRANSLATIONS[lang].mophTitle}</div>
-                      <div className="hero-badge-sub">{TRANSLATIONS[lang].mophDesc}</div>
+                <div className="hero-brand-panel">
+                  <div className="hero-brand-orb hero-brand-orb-1" />
+                  <div className="hero-brand-orb hero-brand-orb-2" />
+                  <div className="hero-brand-layout">
+                    <div className="hero-brand-logo-wrap">
+                      <img src="/logo.png" className="hero-brand-logo" alt="Cure Net Logo" />
+                    </div>
+                    <div className="hero-brand-stats">
+                      <div className="hero-badge hero-badge-clean">
+                        <Activity size={22} className="text-primary" />
+                        <div>
+                          <div className="hero-badge-title">{TRANSLATIONS[lang].mophTitle}</div>
+                          <div className="hero-badge-sub">{TRANSLATIONS[lang].mophDesc}</div>
+                        </div>
+                      </div>
+                      <div className="hero-stat-card">
+                        <strong>34 Provinces</strong>
+                        <span>Reliable distribution coverage across Afghanistan.</span>
+                      </div>
+                      <div className="hero-stat-card">
+                        <strong>26 Formulations</strong>
+                        <span>Cleanly organized catalog for faster product discovery.</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1014,7 +1055,7 @@ function App() {
 
                 <div className="new-products-scroll">
                   {products.filter(isNewProduct).map(prod => (
-                    <div key={prod.id} className="product-card" style={{ position: 'relative', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-glass)', textAlign: 'left' }}>
+                    <div key={prod.id} className="product-card" style={{ position: 'relative', textAlign: lang === 'en' ? 'left' : 'right' }}>
                       <span className="new-badge">NEW</span>
                       <div className="product-category-tag">{prod.category}</div>
                       <h4 style={{ color: 'var(--primary-light)', fontSize: '1.1rem', margin: '0.5rem 0 0.2rem' }}>{prod.name}</h4>
@@ -1025,7 +1066,7 @@ function App() {
                       </p>
 
                       <div className="d-flex justify-between align-center mt-4">
-                        <span style={{ fontWeight: 800, color: '#ffffff', fontSize: '1.1rem' }}>{prod.price.toFixed(1)} AFG</span>
+                        <span style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: '1.1rem' }}>{prod.price.toFixed(1)} AFG</span>
                         <button className="btn btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={() => addToCart(prod)}>
                           Add to Dispatch
                         </button>
@@ -1097,14 +1138,31 @@ function App() {
             </section>
 
             {/* DYNAMIC SHOWCASE LAB SECTION */}
-            <section className="content-section" style={{ background: 'rgba(17, 24, 39, 0.4)', maxWidth: '100%' }}>
-              <div className="hero-section" style={{ padding: '2rem max(2rem, (100% - 1280px)/2)' }}>
+            <section className="content-section clean-highlight-section" style={{ maxWidth: '100%' }}>
+              <div className="hero-section clean-highlight-wrap" style={{ padding: '2rem max(2rem, (100% - 1280px)/2)' }}>
                 <div className="hero-visual">
-                  <img 
-                    src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800" 
-                    className="hero-img" 
-                    alt="Clinical Quality Control Specialist" 
-                  />
+                  <div className="hero-brand-panel hero-brand-panel-secondary">
+                    <div className="hero-brand-orb hero-brand-orb-3" />
+                    <div className="showcase-copy">
+                      <div className="showcase-kicker">Batch Monitoring</div>
+                      <h3>Clear production flow</h3>
+                      <p>From raw ingredient checks to dispatch review, every stage is presented in a cleaner, brighter interface.</p>
+                    </div>
+                    <div className="showcase-metrics">
+                      <div className="showcase-metric">
+                        <span>Stability Tests</span>
+                        <strong>Verified</strong>
+                      </div>
+                      <div className="showcase-metric">
+                        <span>Packaging Review</span>
+                        <strong>Ready</strong>
+                      </div>
+                      <div className="showcase-metric">
+                        <span>Dispatch Visibility</span>
+                        <strong>Live</strong>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <span className="hero-subtitle">Laboratory Science</span>
@@ -1163,21 +1221,18 @@ function App() {
 
               {/* Products Display Grid */}
               <div className="products-grid">
-                {filteredProducts.map(product => (
+                {filteredProducts.map(product => {
+                  const visual = getCategoryVisual(product.category);
+                  const VisualIcon = visual.Icon;
+
+                  return (
                   <article key={product.id} className="product-card" style={{ opacity: product.available ? 1 : 0.6 }}>
                     <div className="product-img-wrapper">
-                      {/* Generates suitable high-quality custom pharma backgrounds based on category */}
-                      <img 
-                        src={
-                          product.category.includes("Analgesic") 
-                            ? "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&q=80&w=600" 
-                            : product.category.includes("Respiratory")
-                            ? "https://images.unsplash.com/photo-1586015555751-63bb77f4322a?auto=format&fit=crop&q=80&w=600"
-                            : "https://images.unsplash.com/photo-1579165466521-35b91790b74d?auto=format&fit=crop&q=80&w=600"
-                        }
-                        className="product-placeholder-img"
-                        alt={product.name}
-                      />
+                      <div className={`product-visual product-visual-${visual.tone}`}>
+                        <span className="product-visual-pill">{visual.label}</span>
+                        <VisualIcon size={44} />
+                        <span className="product-visual-generic-name">{product.generic}</span>
+                      </div>
                       <span className="product-badge">{product.category}</span>
                     </div>
 
@@ -1218,7 +1273,7 @@ function App() {
                       </div>
                     </div>
                   </article>
-                ))}
+                )})}
               </div>
             </div>
           </section>
@@ -1546,13 +1601,13 @@ function App() {
                             <tr key={order.id}>
                               <td style={{ fontWeight: 800, color: 'var(--primary-light)' }}>#{order.id}</td>
                               <td>
-                                <div style={{ color: '#ffffff', fontWeight: 600 }}>{order.name}</div>
+                                <div style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{order.name}</div>
                                 <div style={{ fontSize: '0.8rem' }} className="d-flex align-center gap-2">
                                   <Phone size={10} /> {order.phone}
                                 </div>
                               </td>
                               <td>
-                                <div style={{ color: '#ffffff' }}>{order.province}</div>
+                                <div style={{ color: 'var(--text-primary)' }}>{order.province}</div>
                                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{order.district}, {order.street}</div>
                                 <div style={{ fontSize: '0.7rem', color: 'var(--primary-light)', fontFamily: 'monospace' }} className="d-flex align-center gap-2">
                                   <MapPin size={10} /> {order.gpsCoords}
@@ -1565,7 +1620,7 @@ function App() {
                                   </div>
                                 ))}
                               </td>
-                              <td style={{ fontWeight: 800, color: '#ffffff' }}>{order.total.toFixed(0)} AF</td>
+                              <td style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{order.total.toFixed(0)} AF</td>
                               <td>
                                 <div className="d-flex flex-column gap-2">
                                   <span className={`status-badge ${order.status.toLowerCase()}`}>
@@ -1718,7 +1773,7 @@ function App() {
 
                     <div className="dashboard-main-grid">
                       {/* Active Subscribers Panel */}
-                      <div className="glass-panel" style={{ background: 'rgba(255,255,255,0.01)' }}>
+                      <div className="glass-panel">
                         <h4 className="mb-4" style={{ color: 'var(--primary-light)' }}>Registered Subscribers Directory</h4>
                         <div className="subscribers-grid">
                           {subscribers.map((email, idx) => (
@@ -1727,7 +1782,7 @@ function App() {
                                 <User size={16} />
                               </div>
                               <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                <div style={{ color: '#ffffff', fontWeight: 600, fontSize: '0.85rem' }}>Subscriber #{idx+1}</div>
+                                <div style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.85rem' }}>Subscriber #{idx+1}</div>
                                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{email}</div>
                               </div>
                             </div>
@@ -1737,13 +1792,13 @@ function App() {
 
                       {/* Broadcaster Terminal */}
                       <div>
-                        <div className="glass-panel" style={{ background: 'rgba(255,255,255,0.01)', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                        <div className="glass-panel" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                           <h4 className="mb-2" style={{ color: 'var(--primary-light)' }}>Interactive SMTP Broadcasting Terminal</h4>
                           <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
                             Simulate launching manual newsletters regarding current clinical inventory to all registered clinics.
                           </p>
 
-                          <div className="smtp-visualizer-container" style={{ flex: 1, minHeight: '260px', maxHeight: '350px', background: '#070b13', border: '1px solid var(--border-glass)' }}>
+                          <div className="smtp-visualizer-container" style={{ flex: 1, minHeight: '260px', maxHeight: '350px' }}>
                             {emailMarketingLogs.length === 0 ? (
                               <div className="text-center" style={{ color: 'var(--text-muted)', paddingTop: '5rem', fontSize: '0.8rem' }}>
                                 <Mail size={32} style={{ margin: '0 auto 1rem', opacity: 0.4 }} />
@@ -1976,14 +2031,14 @@ function App() {
                         <button className="qty-btn" onClick={() => updateCartQty(item.id, -1)} disabled={isSmtpActive}>
                           <Minus size={10} />
                         </button>
-                        <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#ffffff' }}>{item.qty}</span>
+                        <span style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-primary)' }}>{item.qty}</span>
                         <button className="qty-btn" onClick={() => updateCartQty(item.id, 1)} disabled={isSmtpActive}>
                           <Plus size={10} />
                         </button>
                       </div>
 
                       <div className="text-center">
-                        <div style={{ fontWeight: 800, fontSize: '1rem', color: '#ffffff' }}>{(item.price * item.qty).toFixed(1)} AF</div>
+                        <div style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--text-primary)' }}>{(item.price * item.qty).toFixed(1)} AF</div>
                         <button 
                           className="cart-close-btn" 
                           style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.2rem' }}
@@ -2015,7 +2070,7 @@ function App() {
 
                 {/* Checkout Fields */}
                 <form onSubmit={handleCheckoutSubmit} className="checkout-form-container">
-                  <h4 style={{ fontSize: '0.9rem', color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.05rem', borderBottom: '1px solid var(--border-glass)', paddingBottom: '0.5rem' }}>
+                  <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.05rem', borderBottom: '1px solid var(--border-glass)', paddingBottom: '0.5rem' }}>
                     Secure Province Delivery Address
                   </h4>
 
@@ -2143,7 +2198,7 @@ function App() {
             <h4 className="mb-6" style={{ color: 'var(--text-secondary)' }}>Secure Transaction Code: #CNP-{lastPlacedOrderId}</h4>
             
             <p style={{ fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '2rem' }}>
-              Salam! Your order has been securely processed. A detailed SMTP email alert was dispatched to our Kabul headquarters at <strong style={{ color: '#ffffff' }}>orders@curenetpharmaceuticals.com</strong>. Our logistics fleet is compiling your province delivery pack. Keep your phone active!
+              Salam! Your order has been securely processed. A detailed SMTP email alert was dispatched to our Kabul headquarters at <strong style={{ color: 'var(--text-primary)' }}>orders@curenetpharmaceuticals.com</strong>. Our logistics fleet is compiling your province delivery pack. Keep your phone active!
             </p>
 
             <button className="btn btn-primary" onClick={() => setShowCheckoutSuccess(false)}>
