@@ -111,6 +111,925 @@ const TRANSLATIONS = {
   }
 };
 
+const CATEGORY_LABELS = {
+  en: {
+    All: "All",
+    "New Products": "New Products",
+    "Analgesic & Fever": "Analgesic & Fever",
+    "Cough & Cold": "Cough & Cold",
+    Respiratory: "Respiratory",
+    Gastrointestinal: "Gastrointestinal",
+    "Vitamins & Health": "Vitamins & Health",
+    "Urinary Tract": "Urinary Tract",
+    "Anti-infective": "Anti-infective",
+    "Cognitive & Energy": "Cognitive & Energy"
+  },
+  da: {
+    All: "همه",
+    "New Products": "محصولات جدید",
+    "Analgesic & Fever": "مسکن و تب",
+    "Cough & Cold": "سرفه و زکام",
+    Respiratory: "تنفسی",
+    Gastrointestinal: "گوارشی",
+    "Vitamins & Health": "ویتامین و سلامت",
+    "Urinary Tract": "مجرای ادرار",
+    "Anti-infective": "ضد عفونی",
+    "Cognitive & Energy": "تمرکز و انرژی"
+  },
+  ps: {
+    All: "ټول",
+    "New Products": "نوي محصولات",
+    "Analgesic & Fever": "درد او تبه",
+    "Cough & Cold": "ټوخی او زکام",
+    Respiratory: "تنفسي",
+    Gastrointestinal: "هاضمه",
+    "Vitamins & Health": "ویټامین او روغتیا",
+    "Urinary Tract": "ادراري لارې",
+    "Anti-infective": "د عفونت ضد",
+    "Cognitive & Energy": "ذهني او انرژي"
+  }
+};
+
+const VISUAL_LABELS = {
+  en: {
+    analgesic: "Pain Relief",
+    respiratory: "Respiratory Care",
+    gastrointestinal: "Digestive Support",
+    vitamins: "Daily Wellness",
+    antiInfective: "Infection Control",
+    urinary: "Targeted Relief",
+    default: "Clinical Care"
+  },
+  da: {
+    analgesic: "کاهش درد",
+    respiratory: "مراقبت تنفسی",
+    gastrointestinal: "حمایت گوارشی",
+    vitamins: "سلامت روزانه",
+    antiInfective: "کنترل عفونت",
+    urinary: "درمان هدفمند",
+    default: "مراقبت طبی"
+  },
+  ps: {
+    analgesic: "د درد ارامي",
+    respiratory: "تنفسي پاملرنه",
+    gastrointestinal: "د هاضمې ملاتړ",
+    vitamins: "ورځنۍ روغتیا",
+    antiInfective: "د عفونت کنټرول",
+    urinary: "هدفمنه درملنه",
+    default: "طبي پاملرنه"
+  }
+};
+
+const DIAGNOSTIC_COPY = {
+  en: {
+    fever: {
+      label: "Fever & Cold Symptoms",
+      disease: "Hyperpyrexia & Influenza",
+      description: "Elevated body temperature, cold flashes, teething discomfort, or mild viral aches.",
+      confidence: "98% Match"
+    },
+    dry_cough: {
+      label: "Dry Non-productive Cough",
+      disease: "Acute Dry Cough & Bronchitis",
+      description: "Continuous dry hacking, throat tickling, lack of phlegm, or throat irritation.",
+      confidence: "95% Match"
+    },
+    stomach_acid: {
+      label: "Acid Heartburn & Gastritis",
+      disease: "Gastroesophageal Reflux (GERD)",
+      description: "Burning sensation in upper chest, acid regurgitation, bloating, or stomach upset.",
+      confidence: "94% Match"
+    },
+    asthma: {
+      label: "Asthma & Wheezing",
+      disease: "Bronchial Asthma / COPD Spasms",
+      description: "Difficulty breathing, chest tightness, wheezing sound, or bronchial inflammation.",
+      confidence: "92% Match"
+    },
+    uti: {
+      label: "Burning Urination",
+      disease: "Acidic Urine / Suspected UTI",
+      description: "Painful urination, high urine acidity, bladder discomfort, or crystal presence.",
+      confidence: "96% Match"
+    },
+    infection: {
+      label: "Bacterial Diarrhea",
+      disease: "Amoebic Dysentery & Parasites",
+      description: "Stomach cramping, severe diarrhea, microbial infection, or dental abscesses.",
+      confidence: "97% Match"
+    },
+    fatigue: {
+      label: "Fatigue & Anemia",
+      disease: "Iron-Deficiency Anemia & Weakness",
+      description: "Dizziness, persistent tiredness, poor mental focus, pale skin, or general lethargy.",
+      confidence: "93% Match"
+    }
+  },
+  da: {
+    fever: {
+      label: "علائم تب و زکام",
+      disease: "تب بلند و آنفلوآنزا",
+      description: "حرارت بلند بدن، لرزه، درد خفیف ویروسی یا ناراحتی دندان‌درآوردن.",
+      confidence: "۹۸٪ مطابقت"
+    },
+    dry_cough: {
+      label: "سرفه خشک",
+      disease: "سرفه خشک حاد و برونشیت",
+      description: "سرفه خشک پیهم، خارشی شدن گلو یا تحریک بدون بلغم.",
+      confidence: "۹۵٪ مطابقت"
+    },
+    stomach_acid: {
+      label: "ترشی و سوزش معده",
+      disease: "ریفلاکس و التهاب معده",
+      description: "سوزش سینه، برگشت اسید، نفخ یا ناراحتی معده.",
+      confidence: "۹۴٪ مطابقت"
+    },
+    asthma: {
+      label: "آسم و خس‌خس سینه",
+      disease: "اسپاسم آسم یا COPD",
+      description: "تنگی نفس، فشار سینه، صدای خس‌خس یا التهاب مجاری تنفسی.",
+      confidence: "۹۲٪ مطابقت"
+    },
+    uti: {
+      label: "سوزش ادرار",
+      disease: "اسیدی بودن ادرار یا UTI مشکوک",
+      description: "ادرار دردناک، اسیدی بودن زیاد، ناراحتی مثانه یا وجود کریستال.",
+      confidence: "۹۶٪ مطابقت"
+    },
+    infection: {
+      label: "اسهال عفونی",
+      disease: "دیسنتری آمیبی و انگل‌ها",
+      description: "دل‌درد، اسهال شدید، عفونت میکروبی یا آبسه دندان.",
+      confidence: "۹۷٪ مطابقت"
+    },
+    fatigue: {
+      label: "خستگی و کم‌خونی",
+      disease: "کم‌خونی ناشی از کمبود آهن",
+      description: "سرگیجه، خستگی دوامدار، تمرکز کم یا ضعف عمومی.",
+      confidence: "۹۳٪ مطابقت"
+    }
+  },
+  ps: {
+    fever: {
+      label: "د تب او زکام نښې",
+      disease: "لوړه تبه او انفلونزا",
+      description: "د بدن لوړه تودوخه، یخنۍ، سپک ویروسي دردونه یا د غاښ راوتلو تکلیف.",
+      confidence: "۹۸٪ سمون"
+    },
+    dry_cough: {
+      label: "وچ ټوخ",
+      disease: "شدید وچ ټوخ او برونشیت",
+      description: "پرله‌پسې وچ ټوخ، د ستوني خارښت یا بې بلغم تحرک.",
+      confidence: "۹۵٪ سمون"
+    },
+    stomach_acid: {
+      label: "ترشوالی او د معدې سوخت",
+      disease: "ریفلاکس او د معدې التهاب",
+      description: "د سینې سوخت، د اسید راګرځېدل، پړسوب یا د معدې ناراحتي.",
+      confidence: "۹۴٪ سمون"
+    },
+    asthma: {
+      label: "استما او خس خس",
+      disease: "د استما یا COPD سپاسم",
+      description: "ساه لنډي، د سینې فشار، خس خس یا د تنفسي لارو التهاب.",
+      confidence: "۹۲٪ سمون"
+    },
+    uti: {
+      label: "د ادرار سوخت",
+      disease: "تیزابي ادرار یا شکمن UTI",
+      description: "دردناک ادرار، لوړه تیزابیت، د مثانې تکلیف یا کرسټالونه.",
+      confidence: "۹۶٪ سمون"
+    },
+    infection: {
+      label: "میکروبي نس ناستی",
+      disease: "امیبي پیچش او پرازیتونه",
+      description: "د ګېډې درد، شدید نس ناستی، میکروبي عفونت یا د غاښ ابسه.",
+      confidence: "۹۷٪ سمون"
+    },
+    fatigue: {
+      label: "ستړیا او کم‌خوني",
+      disease: "د اوسپنې کموالي کم‌خوني",
+      description: "سرګرځېدل، دوامداره ستړیا، کم تمرکز یا عمومي کمزوري.",
+      confidence: "۹۳٪ سمون"
+    }
+  }
+};
+
+const UI_COPY = {
+  en: {
+    home: {
+      heroBrandCopy: "Clean manufacturing presentation, stronger product visibility, and dependable nationwide delivery.",
+      coverageTitle: "34 Provinces",
+      coverageDesc: "Reliable distribution coverage across Afghanistan.",
+      formulationsTitle: "26 Formulations",
+      formulationsDesc: "Cleanly organized catalog for faster product discovery.",
+      subscriberCount: "Total Registered Subscriber Entities",
+      features: {
+        formulationsTitle: "26 Medical Formulations",
+        formulationsDesc: "From pediatric Paracetamol to specialized active Citrate syrups. Each engineered under strict quality assurance.",
+        aiTitle: "AI Symptoms Checker",
+        aiDesc: "Instant online symptom analysis. Recommends exact medicine matches with clinical dosages and safety warnings.",
+        gpsTitle: "GPS Target Delivery",
+        gpsDesc: "Interactive map pins help pinpoint your exact pharmacy or home location for seamless province shipping."
+      },
+      showcase: {
+        kicker: "Batch Monitoring",
+        title: "Clear production flow",
+        desc: "From raw ingredient checks to dispatch review, every stage is presented in a cleaner, brighter interface.",
+        metrics: {
+          tests: "Stability Tests",
+          packaging: "Packaging Review",
+          dispatch: "Dispatch Visibility",
+          verified: "Verified",
+          ready: "Ready",
+          live: "Live"
+        },
+        sectionKicker: "Laboratory Science",
+        sectionTitle: "Advanced Production & Rigorous Assays",
+        sectionDesc: "Each Cure Net batch goes through stability checks and controlled packaging review to keep products dependable through demanding regional logistics.",
+        cta: "Get in Touch with our Labs"
+      }
+    },
+    products: {
+      subtitle: "Active Inventory",
+      title: "Registered Medical Formulations",
+      desc: "Explore our active catalog of syrups, suspensions, supplements, and vitamins manufactured by Cure Net.",
+      search: "Search medicine or generic...",
+      filterTitle: "Therapeutic Use",
+      priceLabel: "Price per Bottle",
+      boxLabel: "Box",
+      addToCart: "Add to Order",
+      outOfStock: "Out of Stock",
+      newBadge: "New"
+    },
+    diagnostics: {
+      subtitle: "AI Diagnostics Interface",
+      title: "Automated Symptom Recommender",
+      desc: "Select a symptom profile or describe the condition to get the closest medicine recommendation from our catalog.",
+      selectorTitle: "Patient Diagnostic Selector",
+      selectorDesc: "Select your primary symptom profile or enter detailed custom conditions below.",
+      detailedSymptoms: "Detailed Symptoms (Optional)",
+      inputPlaceholder: "Type details about the symptoms...",
+      analyze: "Analyze Conditions & Suggest Medicine",
+      disclaimerTitle: "Clinical Warning Disclaimer",
+      disclaimer: "This AI tool provides quick matches based on indications and does not replace a doctor's visit.",
+      running: "AI Diagnostics running query...",
+      active: "AI Diagnostics Active",
+      loadingTitle: "Compiling Chemical Affinities...",
+      loadingDesc: "Comparing symptom patterns with active ingredients from our catalog.",
+      recommendedTitle: "Highly Recommended Formulation(s):",
+      order: "Order",
+      idleTitle: "Awaiting Patient Telemetry",
+      idleDesc: "Select a symptom tag or describe symptoms to compute medicine recommendations.",
+      confidenceSuffix: "Confidence"
+    },
+    contact: {
+      subtitle: "Reach Our Labs",
+      title: "Cure Net Headquarters",
+      desc: "Have questions about manufacturing, distribution, or medical orders? Contact our team in Afghanistan.",
+      formTitle: "Corporate & Lab Inquiries",
+      name: "Full Name",
+      email: "Email Address",
+      message: "Message",
+      messagePlaceholder: "Your question regarding shipping, bulk purchases, or certificates...",
+      send: "Send Secure Message",
+      mapTitle: "Locate Our Headquarters",
+      mapDesc: "We operate specialized production facilities in Kabul with high manufacturing standards.",
+      addressTitle: "Corporate Address",
+      phoneTitle: "Operations Support Desk",
+      mailTitle: "Secure Communications",
+      bulkTitle: "Pharmacy Bulk Purchases",
+      bulkDesc: "Licensed pharmacies and distributors can contact us directly for high-volume carton discounts."
+    },
+    admin: {
+      authTitle: "Administrative Handshake Required",
+      authDesc: "Authorized staff only. Enter credentials to unlock orders and inventory.",
+      passwordPlaceholder: "Enter Admin Password...",
+      verify: "Verify Credentials",
+      hintLabel: "Hint:",
+      headerTitle: "Cure Net Administration Console",
+      headerSubtitle: "Real-time inventory and province shipment telemetry.",
+      lock: "Lock Session",
+      stats: {
+        shipments: "Total Shipments",
+        revenue: "Total Revenue",
+        pending: "Pending Dispatch",
+        subscribers: "Registered Subscribers"
+      },
+      tabs: {
+        orders: "Orders Registry",
+        inventory: "Inventory Control",
+        marketing: "Email Marketing Hub",
+        chatbot: "Operations AI & Telemetry"
+      },
+      ordersTitle: "Active Province Orders",
+      orderTable: {
+        orderId: "Order ID",
+        customer: "Customer & Contacts",
+        province: "Province / Coordinates",
+        formulations: "Formulations Purchased",
+        total: "Total AFG",
+        status: "Status Control",
+        ship: "Ship Pack",
+        deliver: "Deliver Pack"
+      },
+      status: {
+        Pending: "Pending",
+        Shipped: "Shipped",
+        Delivered: "Delivered"
+      },
+      inventoryTitle: "Global Inventory & Product Scaffolder",
+      fields: {
+        name: "Medicine Brand Name",
+        generic: "Chemical Generic Name",
+        packing: "Packing (Size/ML)",
+        price: "Price in AFG",
+        carton: "Carton Qty (Box)",
+        category: "Therapeutic Use Category",
+        description: "Formulation Description"
+      },
+      publish: "Scaffold & Publish",
+      active: "Active",
+      disabled: "Disabled",
+      marketingTitle: "Newsletter Broadcasting & Automated Email Hub",
+      marketingDesc: "Subscribed clinics receive automated alerts when medicines are added or updated.",
+      subscribersTitle: "Registered Subscribers Directory",
+      subscriberLabel: "Subscriber",
+      terminalTitle: "Interactive SMTP Broadcasting Terminal",
+      terminalDesc: "Simulate a manual newsletter broadcast to all registered clinics.",
+      terminalIdle: "Terminal Idle. Scaffold a new product or trigger a broadcast simulation to view SMTP logs.",
+      broadcastRunning: "Dispatched Transmission Running...",
+      broadcastCta: "Broadcast Operational Update Simulation",
+      telemetryTitle: "Province Telemetry",
+      shipmentsSuffix: "shipment(s)",
+      aiTitle: "Operations AI Assistant",
+      aiPlaceholder: "Query province metrics, stock levels..."
+    },
+    footer: {
+      desc: "Cure Net Pharmaceuticals is a MoPH-certified pharmaceutical brand in Afghanistan focused on clean manufacturing and dependable logistics.",
+      menuTitle: "Medicines Menu",
+      menu: {
+        analgesic: "Analgesics & Fever",
+        respiratory: "Respiratory Solutions",
+        gastrointestinal: "Gastrointestinal Support",
+        vitamins: "Multivitamins & Folate"
+      },
+      servicesTitle: "Interactive Services",
+      services: {
+        diagnostics: "AI Diagnostics Checker",
+        shipping: "Afghanistan Province Shipments",
+        partnerships: "Enterprise Manufacturing Partnerships"
+      },
+      hoursTitle: "Operational Hours",
+      hours: {
+        weekdays: "Saturday - Thursday: 8:00 AM - 5:00 PM",
+        friday: "Friday: Corporate Desk Closed",
+        emergency: "Operational Emergency Contact:"
+      },
+      bottom: "All Rights Reserved. Certified GMP Manufacturer.",
+      staffPortal: "Staff Portal",
+      compliance: "WHO Compliance",
+      registry: "MoPH Registry"
+    },
+    cart: {
+      title: "Your Order Cart",
+      emptyTitle: "Your Cart is Empty",
+      emptyDesc: "Browse the catalog or use diagnostics to add products to your order.",
+      remove: "Remove",
+      subtotal: "Subtotal",
+      shippingTo: "Shipping to",
+      total: "Grand Total",
+      deliveryTitle: "Secure Province Delivery Address",
+      fullName: "Full Delivery Name",
+      province: "Province Selection",
+      district: "District",
+      street: "Street & House No.",
+      phone: "Contact Phone Number",
+      mapTitle: "High Accuracy Satellite Pinpoint",
+      gps: "GPS",
+      autodetect: "Auto-Detect Live GPS Coordinates",
+      submit: "Submit Order & Dispatch SMTP Email",
+      successTitle: "Order Successfully Transmitted!",
+      successCode: "Secure Transaction Code",
+      successDesc: "Your order has been processed securely and our logistics team is preparing your province delivery pack.",
+      close: "Acknowledge & Close"
+    },
+    alerts: {
+      checkoutRequired: "All fields are required to secure high-accuracy delivery.",
+      invalidEmail: "Please provide a valid active email address.",
+      duplicateEmail: "This email is already registered to receive Cure Net product alerts.",
+      subscribeSuccess: "has been successfully added to our product alert list.",
+      invalidAdmin: "Invalid Administrative Credentials.",
+      addProductRequired: "Please fill all required inputs to create the product.",
+      addProductSuccess: "Product created and subscriber notifications were prepared.",
+      contactSuccess: "Your inquiry has been transmitted to our corporate communication desk.",
+      productDefaultDesc: "Premium medical formulation manufactured under strict quality standards by Cure Net Pharmaceuticals.",
+      productDefaultCaution: "Use strictly according to certified medical guidance."
+    },
+    chatbot: {
+      intro: "Salam. I am the CNP Operations Assistant. Ask me anything about province sales metrics, symptom trends, or restock warnings.",
+      provinceReplyPrefix: "Current order distribution across provinces:",
+      provinceReplySuffix: "Kabul remains the highest shipping vector.",
+      noOrders: "No orders logged yet",
+      restockAllClear: "Operational Update: All registered medicines are currently available in the catalog.",
+      restockAlertPrefix: "Operational Alert: These medicines are marked unavailable:",
+      revenuePrefix: "Dynamic Financial Telemetry: Total logged turnover is",
+      revenueSuffix: "pending order packages still need dispatch.",
+      fallback: "Operational view indicates strong demand in Kabul, Herat, and Mazar-i-Sharif for respiratory medicines this week."
+    }
+  },
+  da: {
+    home: {
+      heroBrandCopy: "ارائه پاک تولید، دید بهتر محصولات و توزیع مطمئن در سراسر کشور.",
+      coverageTitle: "۳۴ ولایت",
+      coverageDesc: "پوشش قابل اعتماد توزیع در سراسر افغانستان.",
+      formulationsTitle: "۲۶ فرمول",
+      formulationsDesc: "کاتالوگ منظم برای یافتن سریع‌تر محصول.",
+      subscriberCount: "مجموع مشترکین ثبت‌شده",
+      features: {
+        formulationsTitle: "۲۶ فرمول طبی",
+        formulationsDesc: "از پاراستامول اطفال تا شربت‌های تخصصی؛ همه با کنترل کیفیت دقیق.",
+        aiTitle: "بررسی هوشمند علائم",
+        aiDesc: "تحلیل سریع آنلاین علائم و پیشنهاد نزدیک‌ترین داروی مناسب.",
+        gpsTitle: "تحویل هدفمند با GPS",
+        gpsDesc: "نقشه تعاملی برای تعیین دقیق موقعیت دواخانه یا منزل شما."
+      },
+      showcase: {
+        kicker: "نظارت بچ",
+        title: "روند روشن تولید",
+        desc: "از بررسی مواد اولیه تا بازبینی ارسال، همه مراحل در یک رابط روشن‌تر نمایش داده می‌شود.",
+        metrics: {
+          tests: "آزمایش پایداری",
+          packaging: "بازبینی بسته‌بندی",
+          dispatch: "دید ارسال",
+          verified: "تایید شد",
+          ready: "آماده",
+          live: "زنده"
+        },
+        sectionKicker: "دانش لابراتوار",
+        sectionTitle: "تولید پیشرفته و آزمایش‌های دقیق",
+        sectionDesc: "هر بچ کیور نیت از آزمایش پایداری و بازبینی کنترل‌شده بسته‌بندی می‌گذرد تا کیفیت در مسیرهای دشوار حفظ شود.",
+        cta: "تماس با لابراتوار ما"
+      }
+    },
+    products: {
+      subtitle: "موجودی فعال",
+      title: "فرمول‌های طبی ثبت‌شده",
+      desc: "کاتالوگ فعال شربت‌ها، ساسپنشن‌ها، مکمل‌ها و ویتامین‌های کیور نیت را ببینید.",
+      search: "جستجوی دارو یا نام جنریک...",
+      filterTitle: "کاربرد درمانی",
+      priceLabel: "قیمت هر بوتل",
+      boxLabel: "کارتن",
+      addToCart: "افزودن به سفارش",
+      outOfStock: "ناموجود",
+      newBadge: "جدید"
+    },
+    diagnostics: {
+      subtitle: "رابط تشخیص هوشمند",
+      title: "پیشنهاددهنده خودکار علائم",
+      desc: "یک دسته علائم را انتخاب کنید یا وضعیت را شرح دهید تا نزدیک‌ترین داروی مناسب پیشنهاد شود.",
+      selectorTitle: "انتخاب‌گر علائم مریض",
+      selectorDesc: "علائم اصلی را انتخاب کنید یا توضیحات بیشتر را در پایین وارد نمایید.",
+      detailedSymptoms: "علائم تفصیلی (اختیاری)",
+      inputPlaceholder: "جزئیات علائم را بنویسید...",
+      analyze: "تحلیل علائم و پیشنهاد دوا",
+      disclaimerTitle: "هشدار طبی",
+      disclaimer: "این ابزار تنها تطبیق سریع ارائه می‌کند و جایگزین مراجعه به داکتر نیست.",
+      running: "تشخیص هوشمند در حال بررسی...",
+      active: "تشخیص هوشمند فعال است",
+      loadingTitle: "در حال تطبیق ترکیبات...",
+      loadingDesc: "الگوهای علائم با مواد موثره کاتالوگ مقایسه می‌شود.",
+      recommendedTitle: "فرمول‌های بسیار پیشنهادی:",
+      order: "سفارش",
+      idleTitle: "در انتظار معلومات مریض",
+      idleDesc: "یک برچسب علائم انتخاب کنید یا علائم را شرح دهید تا پیشنهادها نمایش شود.",
+      confidenceSuffix: "اطمینان"
+    },
+    contact: {
+      subtitle: "ارتباط با لابراتوار",
+      title: "دفتر مرکزی کیور نیت",
+      desc: "برای پرسش درباره تولید، توزیع یا سفارشات طبی با تیم ما تماس بگیرید.",
+      formTitle: "پرسش‌های شرکتی و لابراتوار",
+      name: "نام مکمل",
+      email: "آدرس ایمیل",
+      message: "پیام",
+      messagePlaceholder: "پرسش شما درباره ارسال، خرید عمده یا اسناد...",
+      send: "ارسال پیام امن",
+      mapTitle: "موقعیت دفتر مرکزی",
+      mapDesc: "ما در کابل دارای تاسیسات تخصصی تولیدی با معیارهای بلند هستیم.",
+      addressTitle: "آدرس شرکت",
+      phoneTitle: "دفتر پشتیبانی عملیات",
+      mailTitle: "ارتباطات امن",
+      bulkTitle: "خریدهای عمده دواخانه",
+      bulkDesc: "دواخانه‌ها و توزیع‌کنندگان دارای جواز می‌توانند برای تخفیف‌های حجمی با ما تماس بگیرند."
+    },
+    admin: {
+      authTitle: "ورود اداری ضروری است",
+      authDesc: "فقط برای کارمندان مجاز. برای دسترسی به سفارشات و موجودی، رمز را وارد کنید.",
+      passwordPlaceholder: "رمز مدیریت را وارد کنید...",
+      verify: "تایید اعتبار",
+      hintLabel: "راهنما:",
+      headerTitle: "کنسول مدیریت کیور نیت",
+      headerSubtitle: "موجودی و تله‌متری ارسال ولایت‌ها به‌صورت زنده.",
+      lock: "قفل نشست",
+      stats: {
+        shipments: "مجموع ارسال‌ها",
+        revenue: "درآمد مجموعی",
+        pending: "در انتظار ارسال",
+        subscribers: "مشترکین ثبت‌شده"
+      },
+      tabs: {
+        orders: "ثبت سفارشات",
+        inventory: "کنترل موجودی",
+        marketing: "مرکز ایمیل مارکتینگ",
+        chatbot: "هوش عملیاتی و تله‌متری"
+      },
+      ordersTitle: "سفارشات فعال ولایت‌ها",
+      orderTable: {
+        orderId: "شماره سفارش",
+        customer: "مشتری و تماس",
+        province: "ولایت / مختصات",
+        formulations: "اقلام خریداری‌شده",
+        total: "مجموع افغانی",
+        status: "کنترول وضعیت",
+        ship: "ارسال بسته",
+        deliver: "تحویل بسته"
+      },
+      status: {
+        Pending: "در انتظار",
+        Shipped: "ارسال شد",
+        Delivered: "تحویل شد"
+      },
+      inventoryTitle: "مدیریت موجودی و ایجاد محصول",
+      fields: {
+        name: "نام تجارتی دوا",
+        generic: "نام جنریک",
+        packing: "بسته‌بندی (اندازه/ML)",
+        price: "قیمت به افغانی",
+        carton: "تعداد کارتن",
+        category: "دسته درمانی",
+        description: "توضیحات فرمول"
+      },
+      publish: "ایجاد و نشر",
+      active: "فعال",
+      disabled: "غیرفعال",
+      marketingTitle: "پخش خبرنامه و مرکز ایمیل خودکار",
+      marketingDesc: "کلینیک‌های مشترک هنگام اضافه یا بروزرسانی دواها خبر خودکار دریافت می‌کنند.",
+      subscribersTitle: "فهرست مشترکین ثبت‌شده",
+      subscriberLabel: "مشترک",
+      terminalTitle: "ترمینل تعاملی SMTP",
+      terminalDesc: "پخش دستی خبرنامه برای همه کلینیک‌های ثبت‌شده را شبیه‌سازی کنید.",
+      terminalIdle: "ترمینل آماده است. یک محصول جدید ایجاد کنید یا پخش شبیه‌سازی را اجرا نمایید.",
+      broadcastRunning: "ارسال در حال اجرا...",
+      broadcastCta: "شبیه‌سازی بروزرسانی عملیاتی",
+      telemetryTitle: "تله‌متری ولایت‌ها",
+      shipmentsSuffix: "ارسال",
+      aiTitle: "دستیار هوش عملیاتی",
+      aiPlaceholder: "درباره ولایت‌ها یا موجودی سوال کنید..."
+    },
+    footer: {
+      desc: "کیور نیت یک برند دارویی تاییدشده وزارت صحت عامه در افغانستان است که بر تولید پاک و لوجستیک مطمئن تمرکز دارد.",
+      menuTitle: "فهرست دواها",
+      menu: {
+        analgesic: "مسکن و تب",
+        respiratory: "محصولات تنفسی",
+        gastrointestinal: "حمایت گوارشی",
+        vitamins: "مولتی‌ویتامین و فولات"
+      },
+      servicesTitle: "خدمات تعاملی",
+      services: {
+        diagnostics: "بررسی هوشمند علائم",
+        shipping: "ارسال به ولایت‌ها",
+        partnerships: "همکاری تولیدی"
+      },
+      hoursTitle: "ساعات کاری",
+      hours: {
+        weekdays: "شنبه تا پنجشنبه: ۸:۰۰ صبح تا ۵:۰۰ عصر",
+        friday: "جمعه: دفتر تعطیل",
+        emergency: "تماس اضطراری:"
+      },
+      bottom: "تمام حقوق محفوظ است. تولیدکننده تاییدشده GMP.",
+      staffPortal: "پرتال کارمندان",
+      compliance: "مطابقت WHO",
+      registry: "ثبت وزارت صحت"
+    },
+    cart: {
+      title: "سبد سفارش شما",
+      emptyTitle: "سبد شما خالی است",
+      emptyDesc: "از کاتالوگ دیدن کنید یا از تشخیص هوشمند برای افزودن محصول استفاده نمایید.",
+      remove: "حذف",
+      subtotal: "جمع فرعی",
+      shippingTo: "هزینه ارسال به",
+      total: "مجموع کل",
+      deliveryTitle: "آدرس امن تحویل در ولایت",
+      fullName: "نام کامل دریافت‌کننده",
+      province: "انتخاب ولایت",
+      district: "ناحیه",
+      street: "سرک و شماره خانه",
+      phone: "شماره تماس",
+      mapTitle: "تعیین دقیق موقعیت",
+      gps: "GPS",
+      autodetect: "تشخیص خودکار مختصات",
+      submit: "ثبت سفارش و ارسال ایمیل",
+      successTitle: "سفارش با موفقیت ارسال شد",
+      successCode: "کد امن تراکنش",
+      successDesc: "سفارش شما با موفقیت ثبت شد و تیم لوجستیک ما در حال آماده‌سازی بسته تحویلی است.",
+      close: "بستن"
+    },
+    alerts: {
+      checkoutRequired: "برای ثبت تحویل دقیق، همه فیلدها الزامی است.",
+      invalidEmail: "لطفاً یک آدرس ایمیل معتبر وارد کنید.",
+      duplicateEmail: "این ایمیل قبلاً برای خبرهای محصولات ثبت شده است.",
+      subscribeSuccess: "با موفقیت به فهرست خبرهای محصولات اضافه شد.",
+      invalidAdmin: "اعتبار اداری نادرست است.",
+      addProductRequired: "لطفاً همه فیلدهای ضروری محصول را تکمیل کنید.",
+      addProductSuccess: "محصول ایجاد شد و آماده ارسال خبر به مشترکین است.",
+      contactSuccess: "پیام شما به بخش ارتباطات شرکتی فرستاده شد.",
+      productDefaultDesc: "فرمول طبی با کیفیت بالا که تحت معیارهای سخت‌گیرانه کیور نیت تولید شده است.",
+      productDefaultCaution: "فقط مطابق رهنمود طبی معتبر استفاده شود."
+    },
+    chatbot: {
+      intro: "سلام. من دستیار عملیاتی CNP هستم. درباره فروش ولایت‌ها، روند علائم یا هشدارهای کمبود موجودی سوال کنید.",
+      provinceReplyPrefix: "توزیع فعلی سفارشات در ولایت‌ها:",
+      provinceReplySuffix: "کابل همچنان بیشترین مسیر ارسال را دارد.",
+      noOrders: "هنوز سفارشی ثبت نشده است",
+      restockAllClear: "بروزرسانی عملیاتی: همه دواهای ثبت‌شده فعلاً در کاتالوگ موجود هستند.",
+      restockAlertPrefix: "هشدار عملیاتی: این دواها ناموجود علامت شده‌اند:",
+      revenuePrefix: "تله‌متری مالی: مجموع گردش ثبت‌شده برابر است با",
+      revenueSuffix: "بسته سفارش هنوز در انتظار ارسال است.",
+      fallback: "دید عملیاتی نشان می‌دهد کابل، هرات و مزار برای دواهای تنفسی تقاضای بیشتری دارند."
+    }
+  },
+  ps: {
+    home: {
+      heroBrandCopy: "پاک تولیدي وړاندې کول، د محصولاتو ښه لید او په ټول هېواد کې باوري وېش.",
+      coverageTitle: "۳۴ ولایتونه",
+      coverageDesc: "په ټول افغانستان کې باوري وېشنیز پوښښ.",
+      formulationsTitle: "۲۶ فورمولونه",
+      formulationsDesc: "منظم کتالوګ د چټک موندلو لپاره.",
+      subscriberCount: "د ثبت شوو ګډونوالو شمېر",
+      features: {
+        formulationsTitle: "۲۶ طبي فورمولونه",
+        formulationsDesc: "له ماشومانو لپاره پاراسیټامول څخه تر ځانګړو شربتونو پورې، ټول د کیفیت له سخت کنټرول سره.",
+        aiTitle: "هوښیار د نښو چک",
+        aiDesc: "چټک آنلاین تحلیل او نږدې مناسب درمل وړاندیز.",
+        gpsTitle: "د GPS له لارې هدفمن تحویل",
+        gpsDesc: "تعاملي نقشه ستاسې درملتون یا کور په دقیقه توګه نښه کوي."
+      },
+      showcase: {
+        kicker: "د بچ څارنه",
+        title: "روښانه تولیدي بهیر",
+        desc: "له خامو موادو تر لېږد بیاکتنې پورې، ټول پړاوونه په روښانه انترفېس کې ښکاري.",
+        metrics: {
+          tests: "د ثبات ازموینې",
+          packaging: "د بسته بندۍ بیاکتنه",
+          dispatch: "د لېږد لید",
+          verified: "تایید",
+          ready: "چمتو",
+          live: "فعال"
+        },
+        sectionKicker: "لابراتواري ساینس",
+        sectionTitle: "پرمختللی تولید او دقیقې ازموینې",
+        sectionDesc: "هر Cure Net بچ د ثبات او بسته بندۍ له ارزونې تېرېږي څو کیفیت په اوږده لوجستیک کې خوندي پاتې شي.",
+        cta: "زموږ له لابراتوار سره اړیکه"
+      }
+    },
+    products: {
+      subtitle: "فعاله ذخیره",
+      title: "ثبت شوي طبي فورمولونه",
+      desc: "د Cure Net شربتونه، سسپنشنونه، مکملونه او ویټامینونه وګورئ.",
+      search: "درمل یا جنریک نوم ولټوئ...",
+      filterTitle: "درملیز استعمال",
+      priceLabel: "د هر بوتل بیه",
+      boxLabel: "کارتن",
+      addToCart: "سفارش ته اضافه کول",
+      outOfStock: "موجود نه دی",
+      newBadge: "نوی"
+    },
+    diagnostics: {
+      subtitle: "هوښیار تشخیصي انترفېس",
+      title: "اتومات د نښو سپارښتنه",
+      desc: "د نښو یوه ډله وټاکئ یا حالت ولیکئ تر څو نږدې مناسب درمل وښودل شي.",
+      selectorTitle: "د ناروغ د نښو ټاکونکی",
+      selectorDesc: "اصلي نښه وټاکئ یا نور جزییات لاندې ولیکئ.",
+      detailedSymptoms: "تفصیلي نښې (اختیاري)",
+      inputPlaceholder: "د نښو جزییات ولیکئ...",
+      analyze: "نښې تحلیل او درمل وړاندیز",
+      disclaimerTitle: "طبي خبرداری",
+      disclaimer: "دا وسیله یوازې چټک سمون برابروي او د ډاکټر ځای نه نیسي.",
+      running: "هوښیار تشخیص روان دی...",
+      active: "هوښیار تشخیص فعال دی",
+      loadingTitle: "د ترکیبونو پرتله روانه ده...",
+      loadingDesc: "د نښو بڼې د کتالوګ له فعالو موادو سره پرتله کېږي.",
+      recommendedTitle: "ډېر سپارښتل شوي فورمولونه:",
+      order: "سفارش",
+      idleTitle: "د ناروغ معلوماتو ته انتظار",
+      idleDesc: "د نښو ټګ وټاکئ یا نښې ولیکئ تر څو وړاندیزونه ښکاره شي.",
+      confidenceSuffix: "باور"
+    },
+    contact: {
+      subtitle: "له لابراتوار سره اړیکه",
+      title: "د Cure Net مرکزي دفتر",
+      desc: "د تولید، وېش یا طبي سفارشونو په اړه له ټیم سره اړیکه ونیسئ.",
+      formTitle: "شرکتي او لابراتواري پوښتنې",
+      name: "بشپړ نوم",
+      email: "بریښنالیک",
+      message: "پیغام",
+      messagePlaceholder: "ستاسې پوښتنه د لېږد، عمده پېرود یا سندونو په اړه...",
+      send: "خوندي پیغام لېږل",
+      mapTitle: "زموږ مرکزي دفتر ومومئ",
+      mapDesc: "موږ په کابل کې د لوړو معیارونو ځانګړي تولیدي تاسیسات لرو.",
+      addressTitle: "شرکتي پته",
+      phoneTitle: "د عملیاتو مرستندویه دفتر",
+      mailTitle: "خوندي اړیکې",
+      bulkTitle: "د درملتون عمده پېرود",
+      bulkDesc: "جواز لرونکي درملتونونه او وېشونکي کولای شي د لوړې اندازې تخفیف لپاره اړیکه ونیسي."
+    },
+    admin: {
+      authTitle: "اداري ننوتل اړین دي",
+      authDesc: "یوازې مجاز کارکوونکي. د سفارشونو او ذخیرې د خلاصولو لپاره رمز دننه کړئ.",
+      passwordPlaceholder: "اداري پاسورډ دننه کړئ...",
+      verify: "اعتبار تایید",
+      hintLabel: "اشاره:",
+      headerTitle: "د Cure Net اداري کنسول",
+      headerSubtitle: "د ذخیرې او ولایتي لېږد ژوندۍ شمېرې.",
+      lock: "ناسته قلف کړئ",
+      stats: {
+        shipments: "ټول لېږدونه",
+        revenue: "ټول عاید",
+        pending: "په تمه لېږد",
+        subscribers: "ثبت شوي ګډونوال"
+      },
+      tabs: {
+        orders: "د سفارشونو ثبت",
+        inventory: "د ذخیرې کنټرول",
+        marketing: "د ایمیل بازارموندنې مرکز",
+        chatbot: "عملياتي AI او شمېرې"
+      },
+      ordersTitle: "فعاله ولایتي سفارشونه",
+      orderTable: {
+        orderId: "د سفارش شمېره",
+        customer: "پېرودونکی او اړیکه",
+        province: "ولایت / مختصات",
+        formulations: "پېرودل شوي توکي",
+        total: "ټول افغانۍ",
+        status: "د حالت کنټرول",
+        ship: "بسته ولېږه",
+        deliver: "بسته وسپاره"
+      },
+      status: {
+        Pending: "په تمه",
+        Shipped: "لېږل شوی",
+        Delivered: "سپارل شوی"
+      },
+      inventoryTitle: "د ذخیرې مدیریت او د محصول جوړول",
+      fields: {
+        name: "د درملو تجارتي نوم",
+        generic: "جنریک نوم",
+        packing: "بسته بندي (اندازه/ML)",
+        price: "بیه په افغانیو",
+        carton: "د کارتن شمېر",
+        category: "درملیزه کټه ګوري",
+        description: "د فورمول تشریح"
+      },
+      publish: "جوړ او خپور کړه",
+      active: "فعال",
+      disabled: "غیرفعال",
+      marketingTitle: "خبرپاڼه او اتومات ایمیل مرکز",
+      marketingDesc: "ګډونوال کلینیکونه د درملو د بدلون پر مهال اتومات خبرتیا ترلاسه کوي.",
+      subscribersTitle: "د ثبت شوو ګډونوالو لست",
+      subscriberLabel: "ګډونوال",
+      terminalTitle: "تعاملي SMTP ټرمنل",
+      terminalDesc: "ټولو ثبت شوو کلینیکونو ته د لاسي خبرپاڼې خپرول وازمویئ.",
+      terminalIdle: "ټرمنل چمتو دی. نوی محصول جوړ کړئ یا د خپرولو ازموینه پیل کړئ.",
+      broadcastRunning: "لېږد روان دی...",
+      broadcastCta: "د عملیاتو د تازه معلوماتو ازموینه",
+      telemetryTitle: "ولایتي شمېرې",
+      shipmentsSuffix: "لېږد",
+      aiTitle: "د عملیاتو AI مرستیال",
+      aiPlaceholder: "د ولایتونو یا ذخیرې په اړه پوښتنه وکړئ..."
+    },
+    footer: {
+      desc: "Cure Net په افغانستان کې د عامې روغتیا وزارت تایید شوی درمل جوړولو برانډ دی چې په پاک تولید او باوري لوجستیک تمرکز لري.",
+      menuTitle: "د درملو مینو",
+      menu: {
+        analgesic: "درد او تبه",
+        respiratory: "تنفسي حل لارې",
+        gastrointestinal: "د هاضمې ملاتړ",
+        vitamins: "ملټي ویټامین او فولېټ"
+      },
+      servicesTitle: "تعاملي خدمتونه",
+      services: {
+        diagnostics: "هوښیار تشخیص",
+        shipping: "ولایتي لېږدونه",
+        partnerships: "تولیدي ملګرتیا"
+      },
+      hoursTitle: "کاري ساعتونه",
+      hours: {
+        weekdays: "شنبه تر پنجشنبه: ۸:۰۰ سهار تر ۵:۰۰ ماښام",
+        friday: "جمعه: دفتر تړلی",
+        emergency: "بیړنۍ اړیکه:"
+      },
+      bottom: "ټول حقوق خوندي دي. د GMP تایید شوی تولیدوونکی.",
+      staffPortal: "د کارکوونکو دروازه",
+      compliance: "د WHO مطابقت",
+      registry: "د وزارت ثبت"
+    },
+    cart: {
+      title: "ستاسې د سفارش ټوکرۍ",
+      emptyTitle: "ټوکرۍ مو تشه ده",
+      emptyDesc: "کتالوګ وګورئ یا له تشخیصي برخې څخه محصول اضافه کړئ.",
+      remove: "لرې کول",
+      subtotal: "فرعي ټول",
+      shippingTo: "د لېږد بیه تر",
+      total: "عمومي ټول",
+      deliveryTitle: "د ولایت خوندي تحویلي پته",
+      fullName: "د ترلاسه کوونکي بشپړ نوم",
+      province: "د ولایت ټاکنه",
+      district: "ناحیه",
+      street: "سړک او د کور شمېره",
+      phone: "د اړیکې شمېره",
+      mapTitle: "دقیق موقعیت ټاکنه",
+      gps: "GPS",
+      autodetect: "مختصات په اوتومات ډول ومومئ",
+      submit: "سفارش ثبت او ایمیل ولېږئ",
+      successTitle: "سفارش په بریالیتوب ولېږدول شو",
+      successCode: "خوندي کوډ",
+      successDesc: "ستاسې سفارش په خوندي ډول ثبت شو او زموږ لوجستیک ټیم یې د لېږد لپاره چمتو کوي.",
+      close: "تړل"
+    },
+    alerts: {
+      checkoutRequired: "د دقیق تحویل لپاره ټول معلومات اړین دي.",
+      invalidEmail: "مهرباني وکړئ یو سم بریښنالیک ولیکئ.",
+      duplicateEmail: "دا بریښنالیک مخکې له مخکې ثبت شوی دی.",
+      subscribeSuccess: "په بریالیتوب سره د محصول خبرتیاوو لست ته اضافه شو.",
+      invalidAdmin: "اداري اعتبار ناسم دی.",
+      addProductRequired: "مهرباني وکړئ د محصول ټول اړین معلومات ډک کړئ.",
+      addProductSuccess: "محصول جوړ شو او د ګډونوالو خبرتیاوې چمتو شوې.",
+      contactSuccess: "ستاسې پیغام د شرکت د اړیکو څانګې ته واستول شو.",
+      productDefaultDesc: "لوړ کیفیت لرونکی طبي فورمول چې د Cure Net تر سختو معیارونو لاندې جوړ شوی.",
+      productDefaultCaution: "یوازې د طبي لارښوونې له مخې یې وکاروئ."
+    },
+    chatbot: {
+      intro: "سلام. زه د CNP عملياتي مرستیال یم. د ولایتونو د پلور، نښو او د ذخیرې د کمښت په اړه پوښتنه وکړئ.",
+      provinceReplyPrefix: "په ولایتونو کې د سفارشونو اوسنی وېش:",
+      provinceReplySuffix: "کابل لا هم تر ټولو لوی د لېږد مسیر دی.",
+      noOrders: "تر اوسه هېڅ سفارش نه دی ثبت شوی",
+      restockAllClear: "عملياتي تازه معلومات: ټول ثبت شوي درمل اوس مهال موجود دي.",
+      restockAlertPrefix: "عملياتي خبرداری: دا درمل ناموجود نښه شوي دي:",
+      revenuePrefix: "مالي شمېرې: ټول ثبت شوی گردش",
+      revenueSuffix: "سفارشونه لا هم د لېږد په تمه دي.",
+      fallback: "عملياتي لید ښيي چې کابل، هرات او مزار کې د تنفسي درملو غوښتنه لوړه ده."
+    }
+  }
+};
+
+const PRODUCT_DESCRIPTION_BY_CATEGORY = {
+  da: {
+    "Analgesic & Fever": (product) => `${product.generic} برای کاهش درد، تب و ناراحتی‌های عمومی در قالب شربت یا ساسپنشن تولید شده است.`,
+    "Cough & Cold": (product) => `${product.generic} برای آرام‌سازی سرفه و کاهش تحریک گلو در بسته‌بندی مناسب توزیع عرضه می‌شود.`,
+    Respiratory: (product) => `${product.generic} برای کمک به باز شدن راه‌های تنفسی و کاهش علائم تنفسی طراحی شده است.`,
+    Gastrointestinal: (product) => `${product.generic} برای کاهش ناراحتی معده، ترشی، نفخ یا مشکلات گوارشی در دسترس است.`,
+    "Vitamins & Health": (product) => `${product.generic} به حمایت رشد، انرژی، ایمنی و سلامت عمومی کمک می‌کند.`,
+    "Urinary Tract": (product) => `${product.generic} برای حمایت از مجاری ادرار و کاهش ناراحتی‌های مرتبط استفاده می‌شود.`,
+    "Anti-infective": (product) => `${product.generic} برای کنترل عفونت‌ها و حمایت از درمان مشکلات میکروبی و انگلی عرضه می‌شود.`,
+    "Cognitive & Energy": (product) => `${product.generic} برای تقویت تمرکز، انرژی و توان ذهنی در فرمول مکمل ارائه شده است.`
+  },
+  ps: {
+    "Analgesic & Fever": (product) => `${product.generic} د درد، تب او عمومي ناراحتۍ د کمولو لپاره د شربت يا سسپنشن په بڼه جوړ شوی دی.`,
+    "Cough & Cold": (product) => `${product.generic} د ټوخې ارامولو او د ستوني د تحرک کمولو لپاره په مناسب بسته بندۍ کې وړاندې کېږي.`,
+    Respiratory: (product) => `${product.generic} د تنفسي لارو د پرانیستلو او د تنفسي نښو د کمولو لپاره جوړ شوی دی.`,
+    Gastrointestinal: (product) => `${product.generic} د معدې سوخت، ترشوالي، پړسوب او هاضمي ستونزو د کمولو لپاره کارېږي.`,
+    "Vitamins & Health": (product) => `${product.generic} د ودې، انرژۍ، معافیت او عمومي روغتیا ملاتړ کوي.`,
+    "Urinary Tract": (product) => `${product.generic} د ادراري لارو د ملاتړ او اړوند ناراحتۍ د کمولو لپاره کارېږي.`,
+    "Anti-infective": (product) => `${product.generic} د عفونتونو، میکروبي او پرازیتي ستونزو د کنټرول لپاره وړاندې کېږي.`,
+    "Cognitive & Energy": (product) => `${product.generic} د تمرکز، انرژۍ او ذهني ځواک د ملاتړ لپاره په مکمل فورمول کې وړاندې کېږي.`
+  }
+};
+
+const PRODUCT_CAUTION_BY_CATEGORY = {
+  da: {
+    "Analgesic & Fever": "فقط مطابق دوز توصیه‌شده استفاده شود و برای کودکان خردسال با داکتر مشوره گردد.",
+    "Cough & Cold": "در صورت سرفه شدید، بلغم زیاد یا تداوم علائم با داکتر مشوره کنید.",
+    Respiratory: "از مصرف بیش از حد خودداری کرده و در صورت تنگی نفس شدید فوراً به داکتر مراجعه نمایید.",
+    Gastrointestinal: "مطابق رهنمود استفاده شود و با دواهای دیگر بدون مشوره همزمان نگردد.",
+    "Vitamins & Health": "در جای خشک و خنک نگهداری شود و دور از دسترس اطفال باشد.",
+    "Urinary Tract": "در زمان استفاده آب کافی بنوشید و در صورت دوام علائم با داکتر مشوره نمایید.",
+    "Anti-infective": "کورس دوا را کامل کنید و بدون مشوره داکتر مصرف را قطع نکنید.",
+    "Cognitive & Energy": "در صورت داشتن بیماری زمینه‌ای یا مصرف دواهای دیگر با داکتر مشوره نمایید."
+  },
+  ps: {
+    "Analgesic & Fever": "یوازې د سپارل شوي دوز له مخې وکاروئ او د کوچنیانو لپاره له ډاکټر سره مشوره وکړئ.",
+    "Cough & Cold": "که ټوخی شدید وي، بلغم زیات وي یا نښې دوام وکړي له ډاکټر سره مشوره وکړئ.",
+    Respiratory: "له زیات استعمال څخه ډډه وکړئ او د سختې ساه لنډۍ په صورت کې ژر ډاکټر ته مراجعه وکړئ.",
+    Gastrointestinal: "د لارښوونې مطابق یې وکاروئ او له نورو درملو سره بې مشورې مه ګډوئ.",
+    "Vitamins & Health": "په یخ او وچ ځای کې یې وساتئ او د ماشومانو له لاسرسي لرې یې کېږدئ.",
+    "Urinary Tract": "د استعمال پر وخت کافي اوبه وڅښئ او که نښې دوام وکړي له ډاکټر سره مشوره وکړئ.",
+    "Anti-infective": "د درملنې دوره بشپړه کړئ او بې له ډاکټر مشورې یې مه بندوئ.",
+    "Cognitive & Energy": "که بله ناروغي یا نور درمل لرئ، له ډاکټر سره مشوره وکړئ."
+  }
+};
+
 // 34 Afghanistan Provinces with standard delivery rates
 const AFGHANISTAN_PROVINCES = [
   { name: "Kabul", shippingCost: 50 },
@@ -190,32 +1109,38 @@ const CLINICAL_DIAGNOSTICS = [
   { id: "fatigue", label: "Fatigue & Anemia", disease: "Iron-Deficiency Anemia & Weakness", description: "Dizziness, persistent tiredness, poor mental focus, pale skin, or general lethargy.", medicines: [9, 12, 19, 20], confidence: "93% Match" }
 ];
 
-const getCategoryVisual = (category) => {
+const getCategoryVisual = (category, lang) => {
+  const labels = VISUAL_LABELS[lang] || VISUAL_LABELS.en;
+
   if (category.includes("Analgesic")) {
-    return { Icon: Activity, tone: "emerald", label: "Pain Relief" };
+    return { Icon: Activity, tone: "emerald", label: labels.analgesic };
   }
 
   if (category.includes("Respiratory")) {
-    return { Icon: Sparkles, tone: "sky", label: "Respiratory Care" };
+    return { Icon: Sparkles, tone: "sky", label: labels.respiratory };
+  }
+
+  if (category.includes("Cough")) {
+    return { Icon: Sparkles, tone: "sky", label: labels.respiratory };
   }
 
   if (category.includes("Gastrointestinal")) {
-    return { Icon: Layers, tone: "gold", label: "Digestive Support" };
+    return { Icon: Layers, tone: "gold", label: labels.gastrointestinal };
   }
 
   if (category.includes("Vitamins")) {
-    return { Icon: CheckCircle, tone: "teal", label: "Daily Wellness" };
+    return { Icon: CheckCircle, tone: "teal", label: labels.vitamins };
   }
 
   if (category.includes("Anti-infective")) {
-    return { Icon: ShieldCheck, tone: "violet", label: "Infection Control" };
+    return { Icon: ShieldCheck, tone: "violet", label: labels.antiInfective };
   }
 
   if (category.includes("Urinary")) {
-    return { Icon: MapPin, tone: "rose", label: "Targeted Relief" };
+    return { Icon: MapPin, tone: "rose", label: labels.urinary };
   }
 
-  return { Icon: TrendingUp, tone: "slate", label: "Clinical Care" };
+  return { Icon: TrendingUp, tone: "slate", label: labels.default };
 };
 
 // Initial mock orders to populate the admin dashboard dynamically
@@ -369,7 +1294,7 @@ function App() {
 
   // Admin AI Chatbot state
   const [adminChatMessages, setAdminChatMessages] = useState([
-    { role: 'assistant', text: "Salam. I am the CNP Operations Assistant. Ask me anything about province sales metrics, symptom trends, or inventory restock warnings!" }
+    { role: 'assistant', text: UI_COPY.en.chatbot.intro }
   ]);
   const [adminChatInput, setAdminChatInput] = useState('');
 
@@ -377,6 +1302,21 @@ function App() {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null);
+  const t = TRANSLATIONS[lang];
+  const ui = UI_COPY[lang];
+  const isRtl = lang !== 'en';
+  const translateCategory = (category) => CATEGORY_LABELS[lang]?.[category] || category;
+  const getDiagnosticCopy = (diagnosticId) => DIAGNOSTIC_COPY[lang]?.[diagnosticId] || DIAGNOSTIC_COPY.en[diagnosticId];
+  const getLocalizedStatus = (status) => ui.admin.status[status] || status;
+  const getLocalizedProduct = (product) => {
+    if (lang === 'en') return product;
+
+    return {
+      ...product,
+      description: PRODUCT_DESCRIPTION_BY_CATEGORY[lang]?.[product.category]?.(product) || product.description,
+      caution: PRODUCT_CAUTION_BY_CATEGORY[lang]?.[product.category] || product.caution
+    };
+  };
 
   // Sync state to local storage
   useEffect(() => {
@@ -390,6 +1330,25 @@ function App() {
   useEffect(() => {
     localStorage.setItem('cnp_lang', lang);
   }, [lang]);
+
+  useEffect(() => {
+    document.documentElement.lang = lang === 'da' ? 'fa' : lang;
+    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+  }, [isRtl, lang]);
+
+  useEffect(() => {
+    setAdminChatMessages(prev => {
+      if (
+        prev.length === 1 &&
+        prev[0].role === 'assistant' &&
+        Object.values(UI_COPY).some(copy => copy.chatbot.intro === prev[0].text)
+      ) {
+        return [{ role: 'assistant', text: ui.chatbot.intro }];
+      }
+
+      return prev;
+    });
+  }, [ui.chatbot.intro]);
 
   useEffect(() => {
     localStorage.setItem('cnp_subscribers', JSON.stringify(subscribers));
@@ -430,7 +1389,7 @@ function App() {
     markerRef.current = marker;
 
     // Bind initial popup
-    marker.bindPopup("<strong style='color:#10b981'>Delivery Pharmacy Pinpoint</strong><br/>Drag this to your exact shop/home!").openPopup();
+    marker.bindPopup(`<strong style='color:#10b981'>${ui.cart.mapTitle}</strong><br/>${ui.cart.autodetect}`).openPopup();
 
     // Map drag actions
     marker.on('dragend', () => {
@@ -494,7 +1453,7 @@ function App() {
           if (mapInstanceRef.current && markerRef.current) {
             mapInstanceRef.current.setView([latVal, lngVal], 15);
             markerRef.current.setLatLng([latVal, lngVal]);
-            markerRef.current.bindPopup("<strong style='color:#10b981'>High Accuracy GPS Locked!</strong>").openPopup();
+            markerRef.current.bindPopup(`<strong style='color:#10b981'>${ui.cart.mapTitle}</strong>`).openPopup();
           }
           
           setSmtpLogs(prev => [
@@ -592,10 +1551,11 @@ function App() {
 
       if (match) {
         const matchedProducts = products.filter(p => match.medicines.includes(p.id));
+        const diagnosticCopy = getDiagnosticCopy(match.id);
         setAiAnalysisResult({
-          disease: match.disease,
-          description: match.description,
-          confidence: match.confidence,
+          disease: diagnosticCopy.disease,
+          description: diagnosticCopy.description,
+          confidence: diagnosticCopy.confidence,
           recommendedProducts: matchedProducts
         });
       }
@@ -608,7 +1568,7 @@ function App() {
   const handleCheckoutSubmit = (e) => {
     e.preventDefault();
     if (!checkoutName || !checkoutDistrict || !checkoutStreet || !checkoutPhone) {
-      alert("All fields are required to secure high-accuracy delivery.");
+      alert(ui.alerts.checkoutRequired);
       return;
     }
 
@@ -702,12 +1662,12 @@ function App() {
     // Quick regex validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      alert("Please provide a valid active email address.");
+      alert(ui.alerts.invalidEmail);
       return;
     }
 
     if (subscribers.includes(email)) {
-      alert("This email is already registered to receive Cure Net product alerts!");
+      alert(ui.alerts.duplicateEmail);
       setSubscriberEmail('');
       return;
     }
@@ -723,7 +1683,7 @@ function App() {
       colors: ['#10b981', '#0d9488', '#ffffff']
     });
 
-    alert(`Tashakor! "${email}" has been successfully added to our new product broadcast pipeline!`);
+    alert(`"${email}" ${ui.alerts.subscribeSuccess}`);
   };
 
   // Admin Authentication
@@ -733,7 +1693,7 @@ function App() {
       setAdminAuth(true);
       setAdminError('');
     } else {
-      setAdminError('Invalid Administrative Credentials.');
+      setAdminError(ui.alerts.invalidAdmin);
     }
   };
 
@@ -772,7 +1732,7 @@ function App() {
   const handleAddProduct = (e) => {
     e.preventDefault();
     if (!newProdName || !newProdGeneric || !newProdPacking || !newProdPrice || !newProdCarton) {
-      alert("Please fill all required inputs to create the product.");
+      alert(ui.alerts.addProductRequired);
       return;
     }
 
@@ -788,8 +1748,8 @@ function App() {
       category: newProdCategory,
       available: true,
       createdDate: todayStr, // Tagged with today's date to automatically render under "New Products" for 7 days
-      description: newProdDesc || "Premium medical formulation manufactured under stringent GMP quality criteria by Cure Net Pharmaceuticals.",
-      caution: newProdCaution || "Consume strictly in accordance with certified medical professional guidance."
+      description: newProdDesc || ui.alerts.productDefaultDesc,
+      caution: newProdCaution || ui.alerts.productDefaultCaution
     };
 
     setProducts(prev => [...prev, newProd]);
@@ -853,7 +1813,7 @@ function App() {
     setNewProdCaution('');
     
     // Alert user
-    alert(`Success: Product "${newProd.name}" created! ${subscribers.length} registered email notifications have been simulated in the Marketing Hub!`);
+    alert(`${newProd.name}: ${ui.alerts.addProductSuccess}`);
   };
 
   // Admin AI Chatbot answering logic
@@ -877,23 +1837,23 @@ function App() {
         }, {});
         const chartData = Object.entries(counts).map(([prov, c]) => `${prov}: ${c} order(s)`).join(', ');
         
-        reply = `I parsed our current dynamic database. The order distribution across Afghanistan is currently: [ ${chartData || "No orders logged yet"} ]. Kabul remains the highest shipping vector.`;
+        reply = `${ui.chatbot.provinceReplyPrefix} [ ${chartData || ui.chatbot.noOrders} ]. ${ui.chatbot.provinceReplySuffix}`;
       } 
       else if (text.includes("restock") || text.includes("inventory") || text.includes("stock")) {
         const outOfStock = products.filter(p => !p.available);
         if (outOfStock.length > 0) {
-          reply = `Operational Alert: The following medicines are marked unavailable: ${outOfStock.map(p => p.name).join(', ')}. Recommend requesting a production restock batch immediately.`;
+          reply = `${ui.chatbot.restockAlertPrefix} ${outOfStock.map(p => p.name).join(', ')}.`;
         } else {
-          reply = "Operational Update: All 26 registered medicines are fully restocked and running active in the catalog.";
+          reply = ui.chatbot.restockAllClear;
         }
       } 
       else if (text.includes("revenue") || text.includes("sales value") || text.includes("money")) {
         const totalRev = orders.reduce((sum, o) => sum + o.total, 0);
         const pendingCount = orders.filter(o => o.status === 'Pending').length;
-        reply = `Dynamic Financial Telemetry: Total logged order turnover is ${totalRev.toFixed(1)} AFG. There are currently ${pendingCount} pending order packages that need physical dispatch.`;
+        reply = `${ui.chatbot.revenuePrefix} ${totalRev.toFixed(1)} AFG. ${pendingCount} ${ui.chatbot.revenueSuffix}`;
       }
       else {
-        reply = "Understood. Our AI operation registers consistent diagnostics. Kabul, Herat and Mazar-i-Sharif display the highest demand spikes for respiratory medicines (SALBU-NET and Phylli Cure) this week. Recommend prioritizing shipping logistics to those zones.";
+        reply = ui.chatbot.fallback;
       }
 
       setAdminChatMessages(prev => [...prev, { role: 'assistant', text: reply }]);
@@ -924,9 +1884,9 @@ function App() {
   const categories = ['All', 'New Products', ...new Set(products.map(p => p.category))];
 
   return (
-    <div className={`app-container lang-${lang} ${lang === 'en' ? '' : 'is-rtl'}`.trim()}>
+    <div className={`app-container lang-${lang} ${isRtl ? 'is-rtl' : ''}`.trim()}>
       {/* Navbar Header */}
-      <header className="navbar" style={{ direction: lang === 'en' ? 'ltr' : 'rtl' }}>
+      <header className="navbar" style={{ direction: isRtl ? 'rtl' : 'ltr' }}>
         <div className="navbar-container">
           <div className="logo-wrapper" onClick={() => { setActiveTab('home'); setIsMobileMenuOpen(false); }}>
             <img src="/logo.png" className="logo-img" alt="Cure Net Logo" />
@@ -944,7 +1904,7 @@ function App() {
               <button className={`lang-btn ${lang === 'ps' ? 'active' : ''}`} onClick={() => setLang('ps')}>پشتو</button>
             </div>
 
-            <button className="cart-icon-btn" onClick={() => setIsCartOpen(true)} title="View Cart">
+            <button className="cart-icon-btn" onClick={() => setIsCartOpen(true)} title={ui.cart.title}>
               <ShoppingCart size={20} />
               {cart.length > 0 && <span className="cart-badge">{cart.reduce((sum, i) => sum + i.qty, 0)}</span>}
             </button>
@@ -988,19 +1948,19 @@ function App() {
         {activeTab === 'home' && (
           <div>
             {/* HERO HERO SECTION */}
-            <section className="hero-section" style={{ direction: lang === 'en' ? 'ltr' : 'rtl', textAlign: lang === 'en' ? 'left' : 'right' }}>
+            <section className="hero-section" style={{ direction: isRtl ? 'rtl' : 'ltr', textAlign: isRtl ? 'right' : 'left' }}>
               <div>
                 <span className="hero-subtitle">{TRANSLATIONS[lang].mophTitle}</span>
                 <h1>{TRANSLATIONS[lang].tagline}</h1>
                 <p className="hero-desc">
                   {TRANSLATIONS[lang].description}
                 </p>
-                <div className="hero-buttons" style={{ justifyContent: lang === 'en' ? 'flex-start' : 'flex-end' }}>
+                <div className="hero-buttons" style={{ justifyContent: isRtl ? 'flex-end' : 'flex-start' }}>
                   <button className="btn btn-primary" onClick={() => setActiveTab('products')}>
-                    {TRANSLATIONS[lang].browseBtn} <ArrowRight size={16} style={{ transform: lang === 'en' ? 'none' : 'rotate(180deg)' }} />
+                    {t.browseBtn} <ArrowRight size={16} style={{ transform: isRtl ? 'rotate(180deg)' : 'none' }} />
                   </button>
                   <button className="btn btn-secondary" onClick={() => setActiveTab('diagnostics')}>
-                    {TRANSLATIONS[lang].diagnosticsBtn} <Sparkles size={16} />
+                    {t.diagnosticsBtn} <Sparkles size={16} />
                   </button>
                 </div>
               </div>
@@ -1010,30 +1970,30 @@ function App() {
                   <div className="hero-brand-orb hero-brand-orb-2" />
                   <div className="hero-brand-layout hero-brand-layout-single">
                     <div className="hero-brand-content">
-                      <span className="hero-brand-kicker">{TRANSLATIONS[lang].brandSub}</span>
+                      <span className="hero-brand-kicker">{t.brandSub}</span>
                       <div className="hero-brand-wordmark">
-                        <span>{TRANSLATIONS[lang].brandName}</span>
+                        <span>{t.brandName}</span>
                         <strong>CNP</strong>
                       </div>
                       <p className="hero-brand-copy">
-                        Clean manufacturing presentation, stronger product visibility, and dependable nationwide delivery.
+                        {ui.home.heroBrandCopy}
                       </p>
                     </div>
                     <div className="hero-brand-stats">
                       <div className="hero-badge hero-badge-clean">
-                        <Activity size={22} className="text-primary" />
-                        <div>
-                          <div className="hero-badge-title">{TRANSLATIONS[lang].mophTitle}</div>
-                          <div className="hero-badge-sub">{TRANSLATIONS[lang].mophDesc}</div>
-                        </div>
+                          <Activity size={22} className="text-primary" />
+                          <div>
+                          <div className="hero-badge-title">{t.mophTitle}</div>
+                          <div className="hero-badge-sub">{t.mophDesc}</div>
+                          </div>
                       </div>
                       <div className="hero-stat-card">
-                        <strong>34 Provinces</strong>
-                        <span>Reliable distribution coverage across Afghanistan.</span>
+                        <strong>{ui.home.coverageTitle}</strong>
+                        <span>{ui.home.coverageDesc}</span>
                       </div>
                       <div className="hero-stat-card">
-                        <strong>26 Formulations</strong>
-                        <span>Cleanly organized catalog for faster product discovery.</span>
+                        <strong>{ui.home.formulationsTitle}</strong>
+                        <span>{ui.home.formulationsDesc}</span>
                       </div>
                     </div>
                   </div>
@@ -1042,76 +2002,79 @@ function App() {
             </section>
 
             {/* DEDICATED NEW PRODUCTS CAROUSEL ROW */}
-            <section className="content-section" style={{ direction: lang === 'en' ? 'ltr' : 'rtl' }}>
+            <section className="content-section" style={{ direction: isRtl ? 'rtl' : 'ltr' }}>
               <div className="new-products-banner">
                 <div className="d-flex align-center justify-between gap-4 flex-column md:flex-row mb-6">
-                  <div style={{ textAlign: lang === 'en' ? 'left' : 'right' }}>
-                    <span className="section-subtitle">{TRANSLATIONS[lang].newProducts}</span>
-                    <h2 style={{ margin: 0 }}>{TRANSLATIONS[lang].exploreNewBtn}</h2>
+                  <div style={{ textAlign: isRtl ? 'right' : 'left' }}>
+                    <span className="section-subtitle">{t.newProducts}</span>
+                    <h2 style={{ margin: 0 }}>{t.exploreNewBtn}</h2>
                     <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
-                      {TRANSLATIONS[lang].newArrivals}
+                      {t.newArrivals}
                     </p>
                   </div>
                   <button className="btn btn-teal" onClick={() => { setActiveTab('products'); setCategoryFilter('New Products'); }}>
-                    {TRANSLATIONS[lang].exploreNewBtn} →
+                    {t.exploreNewBtn} <ArrowRight size={16} style={{ transform: isRtl ? 'rotate(180deg)' : 'none' }} />
                   </button>
                 </div>
 
                 <div className="new-products-scroll">
-                  {products.filter(isNewProduct).map(prod => (
-                    <div key={prod.id} className="product-card" style={{ position: 'relative', textAlign: lang === 'en' ? 'left' : 'right' }}>
-                      <span className="new-badge">NEW</span>
-                      <div className="product-category-tag">{prod.category}</div>
-                      <h4 style={{ color: 'var(--primary-light)', fontSize: '1.1rem', margin: '0.5rem 0 0.2rem' }}>{prod.name}</h4>
-                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>{prod.generic}</div>
+                  {products.filter(isNewProduct).map(prod => {
+                    const localizedProd = getLocalizedProduct(prod);
+                    return (
+                    <div key={prod.id} className="product-card" style={{ position: 'relative', textAlign: isRtl ? 'right' : 'left' }}>
+                      <span className="new-badge">{ui.products.newBadge}</span>
+                      <div className="product-category-tag">{translateCategory(localizedProd.category)}</div>
+                      <h4 style={{ color: 'var(--primary-light)', fontSize: '1.1rem', margin: '0.5rem 0 0.2rem' }}>{localizedProd.name}</h4>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>{localizedProd.generic}</div>
                       
                       <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: '0.75rem 0', minHeight: '3.2rem', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
-                        {prod.description}
+                        {localizedProd.description}
                       </p>
 
                       <div className="d-flex justify-between align-center mt-4">
-                        <span style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: '1.1rem' }}>{prod.price.toFixed(1)} AFG</span>
-                        <button className="btn btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={() => addToCart(prod)}>
-                          Add to Dispatch
+                        <span style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: '1.1rem' }}>{localizedProd.price.toFixed(1)} AFG</span>
+                        <button className="btn btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={() => addToCart(localizedProd)}>
+                          {ui.products.addToCart}
                         </button>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 {/* AUTOMATED NEWSLETTER SIGNUP CARD */}
                 <div style={{ marginTop: '2.5rem', borderTop: '1px solid var(--border-glass)', paddingTop: '2.5rem' }}>
-                  <h3 style={{ color: 'var(--primary-light)', marginBottom: '0.5rem' }}>{TRANSLATIONS[lang].subscribeTitle}</h3>
+                  <h3 style={{ color: 'var(--primary-light)', marginBottom: '0.5rem' }}>{t.subscribeTitle}</h3>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', maxWidth: '550px', margin: '0 auto 1.5rem' }}>
-                    {TRANSLATIONS[lang].subscribeDesc}
+                    {t.subscribeDesc}
                   </p>
                   
                   <form onSubmit={handleNewsletterSubscribe} className="email-subscribe-row">
                     <input 
                       type="email" 
                       className="form-input" 
-                      placeholder={TRANSLATIONS[lang].subscribePlaceholder} 
+                      placeholder={t.subscribePlaceholder} 
                       value={subscriberEmail}
                       onChange={e => setSubscriberEmail(e.target.value)}
                       required 
                     />
                     <button type="submit" className="btn btn-teal">
-                      {TRANSLATIONS[lang].subscribeBtn}
+                      {t.subscribeBtn}
                     </button>
                   </form>
                   <div style={{ marginTop: '0.75rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                    Total Registered Subscriber Entities: <strong style={{ color: 'var(--primary-light)' }}>{subscribers.length}</strong>
+                    {ui.home.subscriberCount}: <strong style={{ color: 'var(--primary-light)' }}>{subscribers.length}</strong>
                   </div>
                 </div>
               </div>
             </section>
 
             {/* FEATURES SUMMARY */}
-            <section className="content-section" style={{ paddingTop: '1rem', direction: lang === 'en' ? 'ltr' : 'rtl' }}>
+            <section className="content-section" style={{ paddingTop: '1rem', direction: isRtl ? 'rtl' : 'ltr' }}>
               <div className="section-title-wrapper">
-                <span className="section-subtitle">{TRANSLATIONS[lang].whyChoose}</span>
-                <h2>{TRANSLATIONS[lang].whyChoose}</h2>
-                <p>{TRANSLATIONS[lang].whyDesc}</p>
+                <span className="section-subtitle">{t.whyChoose}</span>
+                <h2>{t.whyChoose}</h2>
+                <p>{t.whyDesc}</p>
               </div>
 
               <div className="features-grid">
@@ -1119,24 +2082,24 @@ function App() {
                   <div className="feature-icon-wrapper">
                     <Layers size={22} />
                   </div>
-                  <h3 className="feature-title">26 Medical Formulations</h3>
-                  <p className="feature-desc">From pediatric Paracetamol to specialized active Citrate syrups. Each engineered under strict quality assurance.</p>
+                  <h3 className="feature-title">{ui.home.features.formulationsTitle}</h3>
+                  <p className="feature-desc">{ui.home.features.formulationsDesc}</p>
                 </div>
 
                 <div className="feature-card" onClick={() => setActiveTab('diagnostics')}>
                   <div className="feature-icon-wrapper" style={{ color: '#0d9488', background: 'rgba(13, 148, 136, 0.08)' }}>
                     <Sparkles size={22} />
                   </div>
-                  <h3 className="feature-title">AI Symptoms Checker</h3>
-                  <p className="feature-desc">Instant online symptom analysis. Recommends exact medicine matches with clinical dosages and safety warnings.</p>
+                  <h3 className="feature-title">{ui.home.features.aiTitle}</h3>
+                  <p className="feature-desc">{ui.home.features.aiDesc}</p>
                 </div>
 
                 <div className="feature-card" onClick={() => setIsCartOpen(true)}>
                   <div className="feature-icon-wrapper" style={{ color: '#f59e0b', background: 'rgba(245, 158, 11, 0.08)' }}>
                     <Map size={22} />
                   </div>
-                  <h3 className="feature-title">GPS Target Delivery</h3>
-                  <p className="feature-desc">Interactive satellite map pins pinpoint your exact pharmacy or home coordinate for seamless province shipping.</p>
+                  <h3 className="feature-title">{ui.home.features.gpsTitle}</h3>
+                  <p className="feature-desc">{ui.home.features.gpsDesc}</p>
                 </div>
               </div>
             </section>
@@ -1148,34 +2111,34 @@ function App() {
                   <div className="hero-brand-panel hero-brand-panel-secondary">
                     <div className="hero-brand-orb hero-brand-orb-3" />
                     <div className="showcase-copy showcase-copy-enhanced">
-                      <div className="showcase-kicker">Batch Monitoring</div>
-                      <h3>Clear production flow</h3>
-                      <p>From raw ingredient checks to dispatch review, every stage is presented in a cleaner, brighter interface.</p>
+                      <div className="showcase-kicker">{ui.home.showcase.kicker}</div>
+                      <h3>{ui.home.showcase.title}</h3>
+                      <p>{ui.home.showcase.desc}</p>
                     </div>
                     <div className="showcase-metrics">
                       <div className="showcase-metric">
-                        <span>Stability Tests</span>
-                        <strong>Verified</strong>
+                        <span>{ui.home.showcase.metrics.tests}</span>
+                        <strong>{ui.home.showcase.metrics.verified}</strong>
                       </div>
                       <div className="showcase-metric">
-                        <span>Packaging Review</span>
-                        <strong>Ready</strong>
+                        <span>{ui.home.showcase.metrics.packaging}</span>
+                        <strong>{ui.home.showcase.metrics.ready}</strong>
                       </div>
                       <div className="showcase-metric">
-                        <span>Dispatch Visibility</span>
-                        <strong>Live</strong>
+                        <span>{ui.home.showcase.metrics.dispatch}</span>
+                        <strong>{ui.home.showcase.metrics.live}</strong>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <span className="hero-subtitle">Laboratory Science</span>
-                  <h2>Advanced Production & Rigorous Assays</h2>
+                  <span className="hero-subtitle">{ui.home.showcase.sectionKicker}</span>
+                  <h2>{ui.home.showcase.sectionTitle}</h2>
                   <p className="hero-desc" style={{ fontSize: '1rem' }}>
-                    Each production batch of Cure Net Pharmaceuticals goes through strenuous chemical assays and stability tests. Shielding essential minerals and multivitamins in custom amber glass bottles or premium PET packaging. We guarantee medicine bio-availability and potency throughout its shelf life, even in demanding regional logistics.
+                    {ui.home.showcase.sectionDesc}
                   </p>
                   <button className="btn btn-teal" onClick={() => setActiveTab('contact')}>
-                    Get in Touch with our Labs
+                    {ui.home.showcase.cta}
                   </button>
                 </div>
               </div>
@@ -1187,9 +2150,9 @@ function App() {
         {activeTab === 'products' && (
           <section className="content-section">
             <div className="section-title-wrapper">
-              <span className="section-subtitle">Active Inventory</span>
-              <h2>Registered Medical Formulations</h2>
-              <p>Explore our active catalog of 26 high-grade syrups, suspensions, supplements, and vitamins manufactured by Cure Net.</p>
+              <span className="section-subtitle">{ui.products.subtitle}</span>
+              <h2>{ui.products.title}</h2>
+              <p>{ui.products.desc}</p>
             </div>
 
             <div className="products-layout">
@@ -1199,7 +2162,7 @@ function App() {
                   <Search size={18} className="search-icon" />
                   <input 
                     type="text" 
-                    placeholder="Search medicine or generic..." 
+                    placeholder={ui.products.search} 
                     className="search-input"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -1207,7 +2170,7 @@ function App() {
                 </div>
 
                 <div className="filter-group">
-                  <h4 className="filter-title">Therapeutic Use</h4>
+                  <h4 className="filter-title">{ui.products.filterTitle}</h4>
                   <ul className="filter-list">
                     {categories.map(cat => (
                       <li key={cat}>
@@ -1215,7 +2178,7 @@ function App() {
                           className={`filter-btn ${categoryFilter === cat ? 'active' : ''}`}
                           onClick={() => setCategoryFilter(cat)}
                         >
-                          {cat}
+                          {translateCategory(cat)}
                         </button>
                       </li>
                     ))}
@@ -1226,53 +2189,58 @@ function App() {
               {/* Products Display Grid */}
               <div className="products-grid">
                 {filteredProducts.map(product => {
-                  const visual = getCategoryVisual(product.category);
+                  const localizedProduct = getLocalizedProduct(product);
+                  const visual = getCategoryVisual(localizedProduct.category, lang);
                   const VisualIcon = visual.Icon;
 
                   return (
-                  <article key={product.id} className="product-card" style={{ opacity: product.available ? 1 : 0.6 }}>
+                  <article key={localizedProduct.id} className="product-card" style={{ opacity: localizedProduct.available ? 1 : 0.6 }}>
                     <div className="product-img-wrapper">
                       <div className={`product-visual product-visual-${visual.tone}`}>
-                        <span className="product-visual-pill">{visual.label}</span>
-                        <VisualIcon size={44} />
-                        <span className="product-visual-generic-name">{product.generic}</span>
+                        <div className="product-visual-topline">
+                          <span className="product-badge">{translateCategory(localizedProduct.category)}</span>
+                          <span className="product-visual-pill">{visual.label}</span>
+                        </div>
+                        <div className="product-visual-icon-wrap">
+                          <VisualIcon size={44} />
+                        </div>
+                        <span className="product-visual-generic-name">{localizedProduct.generic}</span>
                       </div>
-                      <span className="product-badge">{product.category}</span>
                     </div>
 
                     <div className="product-info">
-                      <h3 className="product-name">{product.name}</h3>
-                      <div className="product-generic">{product.generic}</div>
+                      <h3 className="product-name">{localizedProduct.name}</h3>
+                      <div className="product-generic">{localizedProduct.generic}</div>
                       
                       <p style={{ fontSize: '0.8rem', marginBottom: '1rem', flex: 1, color: 'var(--text-secondary)' }}>
-                        {product.description}
+                        {localizedProduct.description}
                       </p>
 
                       <div className="product-meta-row">
                         <span className="product-packing">
-                          <Layers size={12} /> {product.packing}
+                          <Layers size={12} /> {localizedProduct.packing}
                         </span>
                         <span className="product-carton">
-                          <Activity size={12} /> Box: {product.carton} Pcs
+                          <Activity size={12} /> {ui.products.boxLabel}: {localizedProduct.carton} Pcs
                         </span>
                       </div>
 
                       <div className="product-footer">
                         <div>
-                          <div className="product-price-label">Price per Bottle</div>
-                          <div className="product-price">{product.price.toFixed(1)} AFG</div>
+                          <div className="product-price-label">{ui.products.priceLabel}</div>
+                          <div className="product-price">{localizedProduct.price.toFixed(1)} AFG</div>
                         </div>
                         
-                        {product.available ? (
+                        {localizedProduct.available ? (
                           <button 
                             className="product-add-btn"
-                            onClick={() => addToCart(product)}
-                            title="Add to Order Cart"
+                            onClick={() => addToCart(localizedProduct)}
+                            title={ui.products.addToCart}
                           >
                             <ShoppingCart size={16} />
                           </button>
                         ) : (
-                          <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: 700 }}>Out of Stock</span>
+                          <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: 700 }}>{ui.products.outOfStock}</span>
                         )}
                       </div>
                     </div>
@@ -1287,21 +2255,23 @@ function App() {
         {activeTab === 'diagnostics' && (
           <section className="content-section">
             <div className="section-title-wrapper">
-              <span className="section-subtitle">AI Diagnostics Interface</span>
-              <h2>Automated Symptom Recommender</h2>
-              <p>State-of-the-art diagnostic recommendations based on local Cure Net Pharmaceuticals. Select clinical symptoms below to discover appropriate medicine recommendations.</p>
+              <span className="section-subtitle">{ui.diagnostics.subtitle}</span>
+              <h2>{ui.diagnostics.title}</h2>
+              <p>{ui.diagnostics.desc}</p>
             </div>
 
             <div className="ai-recommend-container">
               {/* Form Input Side */}
               <div className="glass-panel ai-form-side">
                 <div>
-                  <h3 className="feature-title mb-2">Patient Diagnostic Selector</h3>
-                  <p style={{ fontSize: '0.85rem' }}>Select your primary symptom profile or enter detailed custom conditions in the diagnostics window below.</p>
+                  <h3 className="feature-title mb-2">{ui.diagnostics.selectorTitle}</h3>
+                  <p style={{ fontSize: '0.85rem' }}>{ui.diagnostics.selectorDesc}</p>
                 </div>
 
                 <div className="symptom-tag-container">
-                  {CLINICAL_DIAGNOSTICS.map(item => (
+                  {CLINICAL_DIAGNOSTICS.map(item => {
+                    const diagnosticCopy = getDiagnosticCopy(item.id);
+                    return (
                     <span 
                       key={item.id}
                       className={`symptom-tag ${selectedDiagnostic === item.id ? 'active' : ''}`}
@@ -1310,18 +2280,19 @@ function App() {
                         setCustomSymptomInput('');
                       }}
                     >
-                      {item.label}
+                      {diagnosticCopy.label}
                     </span>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 <form onSubmit={handleAISymptomSubmit}>
                   <div className="mb-4">
-                    <label className="form-label">Detailed Symptoms (Optional)</label>
+                    <label className="form-label">{ui.diagnostics.detailedSymptoms}</label>
                     <textarea 
                       rows={3} 
                       className="form-textarea"
-                      placeholder="Type details (e.g., 'My child has a mild fever and a persistent dry throat cough since yesterday afternoon...')"
+                      placeholder={ui.diagnostics.inputPlaceholder}
                       value={customSymptomInput}
                       onChange={(e) => {
                         setCustomSymptomInput(e.target.value);
@@ -1331,15 +2302,15 @@ function App() {
                   </div>
 
                   <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
-                    <Sparkles size={16} /> Analyze Conditions & Suggest Medicine
+                    <Sparkles size={16} /> {ui.diagnostics.analyze}
                   </button>
                 </form>
 
                 <div style={{ background: 'rgba(245, 158, 11, 0.05)', border: '1px solid rgba(245, 158, 11, 0.2)', padding: '1rem', borderRadius: '8px', fontSize: '0.75rem', color: 'var(--accent)' }}>
                   <div className="d-flex align-center gap-2 mb-2" style={{ fontWeight: 700 }}>
-                    <AlertCircle size={16} /> Clinical Warning Disclaimer
+                    <AlertCircle size={16} /> {ui.diagnostics.disclaimerTitle}
                   </div>
-                  Our AI Diagnostics provides quick matches based on chemical compound indications. It does not replace a professional doctor's clinical visit. Consult a qualified medical practitioner for severe conditions.
+                  {ui.diagnostics.disclaimer}
                 </div>
               </div>
 
@@ -1348,65 +2319,68 @@ function App() {
                 <div className="ai-diagnostics-header">
                   <div className={isAnalyzing ? "ai-status-pulse" : "ai-status-pulse"} style={{ backgroundColor: isAnalyzing ? '#f59e0b' : '#10b981' }} />
                   <span className="ai-status-text">
-                    {isAnalyzing ? "AI Diagnostics running query..." : "AI Diagnostics Active"}
+                    {isAnalyzing ? ui.diagnostics.running : ui.diagnostics.active}
                   </span>
                 </div>
 
                 {isAnalyzing ? (
                   <div className="ai-idle-message">
                     <RefreshCw size={40} className="text-primary mb-4" style={{ animation: 'spin 2s linear infinite' }} />
-                    <h4>Compiling Chemical Affinities...</h4>
-                    <p style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>Comparing symptom taxonomy to active ingredients in our Afghanistan laboratories...</p>
+                    <h4>{ui.diagnostics.loadingTitle}</h4>
+                    <p style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>{ui.diagnostics.loadingDesc}</p>
                   </div>
                 ) : aiAnalysisResult ? (
                   <div className="ai-diagnostics-result">
                     <div className="ai-disease-card">
                       <div className="disease-name">
                         {aiAnalysisResult.disease}
-                        <span className="disease-confidence">{aiAnalysisResult.confidence} Confidence</span>
+                        <span className="disease-confidence">{aiAnalysisResult.confidence} {ui.diagnostics.confidenceSuffix}</span>
                       </div>
                       <p className="disease-description">{aiAnalysisResult.description}</p>
                     </div>
 
                     <h4 className="mb-2" style={{ fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05rem', color: 'var(--text-primary)' }}>
-                      Highly Recommended Formulation(s):
+                      {ui.diagnostics.recommendedTitle}
                     </h4>
                     
                     <div className="recommended-medicines-list">
-                      {aiAnalysisResult.recommendedProducts.map(med => (
-                        <div key={med.id} className="recommended-med-item">
+                      {aiAnalysisResult.recommendedProducts.map(med => {
+                        const localizedMed = getLocalizedProduct(med);
+                        return (
+                        <div key={localizedMed.id} className="recommended-med-item">
                           <div>
-                            <h4 style={{ color: 'var(--primary-light)' }}>{med.name}</h4>
-                            <span className="inventory-generic-tag">{med.generic} • {med.packing}</span>
-                            <p className="med-meta-desc">{med.description}</p>
+                            <h4 style={{ color: 'var(--primary-light)' }}>{localizedMed.name}</h4>
+                            <span className="inventory-generic-tag">{localizedMed.generic} • {localizedMed.packing}</span>
+                            <p className="med-meta-desc">{localizedMed.description}</p>
                             <div className="med-caution">
-                              <Info size={12} /> {med.caution}
+                              <Info size={12} /> {localizedMed.caution}
                             </div>
                           </div>
                           <div className="text-center" style={{ minWidth: '100px' }}>
-                            <div className="product-price" style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>{med.price.toFixed(1)} AFG</div>
+                            <div className="product-price" style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>{localizedMed.price.toFixed(1)} AFG</div>
                             
-                            {med.available ? (
+                            {localizedMed.available ? (
                               <button 
                                 className="btn btn-teal" 
                                 style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
-                                onClick={() => addToCart(med)}
+                                onClick={() => addToCart(localizedMed)}
                               >
-                                <Plus size={12} /> Order
+                                <Plus size={12} /> {ui.diagnostics.order}
                               </button>
                             ) : (
-                              <span style={{ fontSize: '0.75rem', color: '#ef4444' }}>Out of Stock</span>
+                              <span style={{ fontSize: '0.75rem', color: '#ef4444' }}>{ui.products.outOfStock}</span>
                             )}
                           </div>
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 ) : (
                   <div className="ai-idle-message">
                     <Activity size={48} className="text-primary mb-4" />
-                    <h4>Awaiting Patient Telemetry</h4>
-                    <p style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>Select a symptom tag or describe your physical symptoms on the left. The AI diagnostic system will compute medicine recommendations instantly.</p>
+                    <h4>{ui.diagnostics.idleTitle}</h4>
+                    <p style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>{ui.diagnostics.idleDesc}</p>
                   </div>
                 )}
               </div>
@@ -1418,46 +2392,46 @@ function App() {
         {activeTab === 'contact' && (
           <section className="content-section">
             <div className="section-title-wrapper">
-              <span className="section-subtitle">Reach Our Labs</span>
-              <h2>Cure Net Headquarters</h2>
-              <p>Have questions about manufacturing distribution, contract manufacturing, or medical orders? Get in touch with our corporate team in Afghanistan.</p>
+              <span className="section-subtitle">{ui.contact.subtitle}</span>
+              <h2>{ui.contact.title}</h2>
+              <p>{ui.contact.desc}</p>
             </div>
 
             <div className="contact-section">
               <div className="glass-panel">
-                <h3 className="feature-title mb-4">Corporate & Lab Inquiries</h3>
+                <h3 className="feature-title mb-4">{ui.contact.formTitle}</h3>
                 
                 <form onSubmit={(e) => {
                   e.preventDefault();
-                  alert("Salam! Your inquiry has been transmitted directly to our corporate communication desk at info@curenet.af.");
+                  alert(ui.alerts.contactSuccess);
                 }}>
                   <div className="mb-4">
-                    <label className="form-label">Full Name</label>
-                    <input type="text" className="form-input" placeholder="Your Name" required />
+                    <label className="form-label">{ui.contact.name}</label>
+                    <input type="text" className="form-input" placeholder={ui.contact.name} required />
                   </div>
                   <div className="mb-4">
-                    <label className="form-label">Email Address</label>
+                    <label className="form-label">{ui.contact.email}</label>
                     <input type="email" className="form-input" placeholder="name@company.com" required />
                   </div>
                   <div className="mb-4">
-                    <label className="form-label">Message</label>
-                    <textarea rows={5} className="form-textarea" placeholder="Your specific question regarding shipping, bulk pharmacy purchases, or GMP certificates..." required />
+                    <label className="form-label">{ui.contact.message}</label>
+                    <textarea rows={5} className="form-textarea" placeholder={ui.contact.messagePlaceholder} required />
                   </div>
                   <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
-                    <Send size={16} /> Send Secure Message
+                    <Send size={16} /> {ui.contact.send}
                   </button>
                 </form>
               </div>
 
               <div>
-                <h3 className="feature-title">Locate Our Headquarters</h3>
-                <p>We operate highly specialized production facilities, certified under MoPH and WHO guidelines, located in industrial zones in Kabul.</p>
+                <h3 className="feature-title">{ui.contact.mapTitle}</h3>
+                <p>{ui.contact.mapDesc}</p>
                 
                 <div className="contact-info-list">
                   <div className="contact-info-item">
                     <MapPin size={24} className="contact-info-icon" />
                     <div>
-                      <div className="contact-info-title">Corporate Address</div>
+                      <div className="contact-info-title">{ui.contact.addressTitle}</div>
                       <div className="contact-info-value">Cure Net Pharmaceuticals, Phase 1, Industrial Parks, Kabul, Afghanistan</div>
                     </div>
                   </div>
@@ -1465,7 +2439,7 @@ function App() {
                   <div className="contact-info-item">
                     <Phone size={24} className="contact-info-icon" />
                     <div>
-                      <div className="contact-info-title">Operations Support Desk</div>
+                      <div className="contact-info-title">{ui.contact.phoneTitle}</div>
                       <div className="contact-info-value">+93 (0) 799 44 55 66 / +93 (0) 20 220 55 66</div>
                     </div>
                   </div>
@@ -1473,16 +2447,16 @@ function App() {
                   <div className="contact-info-item">
                     <Mail size={24} className="contact-info-icon" />
                     <div>
-                      <div className="contact-info-title">Secure Communications</div>
+                      <div className="contact-info-title">{ui.contact.mailTitle}</div>
                       <div className="contact-info-value">info@curenet.af / orders@curenet.af</div>
                     </div>
                   </div>
                 </div>
 
                 <div className="glass-panel" style={{ marginTop: '2rem', padding: '1.5rem', background: 'rgba(16, 185, 129, 0.05)', border: '1px dashed var(--border-color)' }}>
-                  <h4 style={{ color: 'var(--primary-light)', marginBottom: '0.5rem' }}>Pharmacy Bulk Purchases</h4>
+                  <h4 style={{ color: 'var(--primary-light)', marginBottom: '0.5rem' }}>{ui.contact.bulkTitle}</h4>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                    Licensed Afghan pharmacies and medical distributors in Herat, Balkh, Nangarhar, and Kunduz are eligible for high-volume carton discounts. Please contact us directly with copy of license.
+                    {ui.contact.bulkDesc}
                   </p>
                 </div>
               </div>
@@ -1497,14 +2471,14 @@ function App() {
               // Administrative Authentication Guard
               <div className="glass-panel" style={{ maxWidth: '480px', margin: '0 auto', textAlign: 'center' }}>
                 <Lock size={48} className="text-primary mb-4" style={{ margin: '0 auto' }} />
-                <h2>Administrative Handshake Required</h2>
-                <p style={{ fontSize: '0.85rem' }}>Authorized staff only. Enter operational credentials to unlock orders registry and inventory dashboard.</p>
+                <h2>{ui.admin.authTitle}</h2>
+                <p style={{ fontSize: '0.85rem' }}>{ui.admin.authDesc}</p>
                 
                 <form onSubmit={handleAdminLogin} style={{ marginTop: '1.5rem' }}>
                   <div className="mb-4">
                     <input 
                       type="password" 
-                      placeholder="Enter Admin Password..." 
+                      placeholder={ui.admin.passwordPlaceholder} 
                       className="form-input text-center"
                       value={adminPassword}
                       onChange={(e) => setAdminPassword(e.target.value)}
@@ -1512,12 +2486,12 @@ function App() {
                   </div>
                   {adminError && <div style={{ color: '#ef4444', fontSize: '0.8rem', marginBottom: '1rem' }}>{adminError}</div>}
                   <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
-                    Verify Credentials
+                    {ui.admin.verify}
                   </button>
                 </form>
                 
                 <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '1rem' }}>
-                  Hint: Use password <code style={{ color: 'var(--primary-light)' }}>paikanm@curenet</code> to authenticate
+                  {ui.admin.hintLabel} <code style={{ color: 'var(--primary-light)' }}>paikanm@curenet</code>
                 </p>
               </div>
             ) : (
@@ -1525,11 +2499,11 @@ function App() {
               <div className="admin-dashboard-container">
                 <div className="admin-header-row">
                   <div className="admin-title-group">
-                    <h2>Cure Net Administration Console</h2>
-                    <span className="admin-subtitle">Real-time inventory and province shipment telemetry.</span>
+                    <h2>{ui.admin.headerTitle}</h2>
+                    <span className="admin-subtitle">{ui.admin.headerSubtitle}</span>
                   </div>
                   <button className="btn btn-secondary" onClick={() => setAdminAuth(false)}>
-                    Lock Session
+                    {ui.admin.lock}
                   </button>
                 </div>
 
@@ -1537,7 +2511,7 @@ function App() {
                 <div className="stats-grid" style={{ marginBottom: '2rem' }}>
                   <div className="stat-card">
                     <div className="stat-info">
-                      <span className="stat-label">Total Shipments</span>
+                      <span className="stat-label">{ui.admin.stats.shipments}</span>
                       <span className="stat-value">{orders.length}</span>
                     </div>
                     <div className="stat-icon-wrapper orders"><ShoppingCart size={24} /></div>
@@ -1545,7 +2519,7 @@ function App() {
 
                   <div className="stat-card">
                     <div className="stat-info">
-                      <span className="stat-label">Total Revenue</span>
+                      <span className="stat-label">{ui.admin.stats.revenue}</span>
                       <span className="stat-value">{(orders.reduce((sum, o) => sum + o.total, 0)).toFixed(0)} AFG</span>
                     </div>
                     <div className="stat-icon-wrapper revenue"><TrendingUp size={24} /></div>
@@ -1553,7 +2527,7 @@ function App() {
 
                   <div className="stat-card">
                     <div className="stat-info">
-                      <span className="stat-label">Pending Dispatch</span>
+                      <span className="stat-label">{ui.admin.stats.pending}</span>
                       <span className="stat-value">{orders.filter(o => o.status === 'Pending').length}</span>
                     </div>
                     <div className="stat-icon-wrapper pending" style={{ color: '#f59e0b' }}><Activity size={24} /></div>
@@ -1561,7 +2535,7 @@ function App() {
 
                   <div className="stat-card">
                     <div className="stat-info">
-                      <span className="stat-label">Registered Subscribers</span>
+                      <span className="stat-label">{ui.admin.stats.subscribers}</span>
                       <span className="stat-value">{subscribers.length}</span>
                     </div>
                     <div className="stat-icon-wrapper products" style={{ color: '#10b981' }}><Mail size={24} /></div>
@@ -1571,33 +2545,33 @@ function App() {
                 {/* SUB-PAGES / TABS NAVIGATION */}
                 <div className="admin-section-tabs">
                   <button className={`admin-tab-btn ${adminSubTab === 'orders' ? 'active' : ''}`} onClick={() => setAdminSubTab('orders')}>
-                    <ShoppingCart size={14} /> Orders Registry ({orders.length})
+                    <ShoppingCart size={14} /> {ui.admin.tabs.orders} ({orders.length})
                   </button>
                   <button className={`admin-tab-btn ${adminSubTab === 'inventory' ? 'active' : ''}`} onClick={() => setAdminSubTab('inventory')}>
-                    <Database size={14} /> Inventory Control ({products.length})
+                    <Database size={14} /> {ui.admin.tabs.inventory} ({products.length})
                   </button>
                   <button className={`admin-tab-btn ${adminSubTab === 'marketing' ? 'active' : ''}`} onClick={() => setAdminSubTab('marketing')}>
-                    <Mail size={14} /> Email Marketing Hub ({subscribers.length})
+                    <Mail size={14} /> {ui.admin.tabs.marketing} ({subscribers.length})
                   </button>
                   <button className={`admin-tab-btn ${adminSubTab === 'chatbot' ? 'active' : ''}`} onClick={() => setAdminSubTab('chatbot')}>
-                    <Sparkles size={14} /> Operations AI & Telemetry
+                    <Sparkles size={14} /> {ui.admin.tabs.chatbot}
                   </button>
                 </div>
 
                 {/* SUB-PAGE 1: ORDERS REGISTRY */}
                 {adminSubTab === 'orders' && (
                   <div className="glass-panel orders-list-panel">
-                    <h3 className="feature-title mb-4">Active Province Orders</h3>
+                    <h3 className="feature-title mb-4">{ui.admin.ordersTitle}</h3>
                     <div className="orders-table-wrapper">
                       <table className="orders-table">
                         <thead>
                           <tr>
-                            <th>Order ID</th>
-                            <th>Customer & Contacts</th>
-                            <th>Province / Coordinates</th>
-                            <th>Formulations Purchased</th>
-                            <th>Total AFG</th>
-                            <th>Status Control</th>
+                            <th>{ui.admin.orderTable.orderId}</th>
+                            <th>{ui.admin.orderTable.customer}</th>
+                            <th>{ui.admin.orderTable.province}</th>
+                            <th>{ui.admin.orderTable.formulations}</th>
+                            <th>{ui.admin.orderTable.total}</th>
+                            <th>{ui.admin.orderTable.status}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1628,7 +2602,7 @@ function App() {
                               <td>
                                 <div className="d-flex flex-column gap-2">
                                   <span className={`status-badge ${order.status.toLowerCase()}`}>
-                                    {order.status}
+                                    {getLocalizedStatus(order.status)}
                                   </span>
                                   {order.status === 'Pending' && (
                                     <button 
@@ -1636,7 +2610,7 @@ function App() {
                                       style={{ padding: '0.2rem 0.5rem', fontSize: '0.7rem' }}
                                       onClick={() => handleUpdateOrderStatus(order.id, 'Shipped')}
                                     >
-                                      Ship Pack
+                                      {ui.admin.orderTable.ship}
                                     </button>
                                   )}
                                   {order.status === 'Shipped' && (
@@ -1645,7 +2619,7 @@ function App() {
                                       style={{ padding: '0.2rem 0.5rem', fontSize: '0.7rem' }}
                                       onClick={() => handleUpdateOrderStatus(order.id, 'Delivered')}
                                     >
-                                      Deliver Pack
+                                      {ui.admin.orderTable.deliver}
                                     </button>
                                   )}
                                 </div>
@@ -1661,55 +2635,55 @@ function App() {
                 {/* SUB-PAGE 2: INVENTORY CONTROL & SCAFFOLDER */}
                 {adminSubTab === 'inventory' && (
                   <div className="glass-panel inventory-manager-container">
-                    <h3 className="feature-title" style={{ marginBottom: '1.5rem' }}>Global Inventory & Product Scaffolder</h3>
+                    <h3 className="feature-title" style={{ marginBottom: '1.5rem' }}>{ui.admin.inventoryTitle}</h3>
                     
                     {/* Quick Add Product Form */}
                     <form onSubmit={handleAddProduct} className="quick-add-form" style={{ marginBottom: '2.5rem' }}>
                       <div className="inventory-input-group">
-                        <span className="inventory-input-label">Medicine Brand Name</span>
+                        <span className="inventory-input-label">{ui.admin.fields.name}</span>
                         <input type="text" placeholder="e.g. Cure-Fen DS" className="inventory-input" value={newProdName} onChange={e => setNewProdName(e.target.value)} />
                       </div>
 
                       <div className="inventory-input-group">
-                        <span className="inventory-input-label">Chemical Generic Name</span>
+                        <span className="inventory-input-label">{ui.admin.fields.generic}</span>
                         <input type="text" placeholder="e.g. IBUPROFEN" className="inventory-input" value={newProdGeneric} onChange={e => setNewProdGeneric(e.target.value)} />
                       </div>
 
                       <div className="inventory-input-group">
-                        <span className="inventory-input-label">Packing (Size/ML)</span>
+                        <span className="inventory-input-label">{ui.admin.fields.packing}</span>
                         <input type="text" placeholder="e.g. 200mg/5ml" className="inventory-input" value={newProdPacking} onChange={e => setNewProdPacking(e.target.value)} />
                       </div>
 
                       <div className="inventory-input-group">
-                        <span className="inventory-input-label">Price in AFG</span>
+                        <span className="inventory-input-label">{ui.admin.fields.price}</span>
                         <input type="number" step="0.1" placeholder="e.g. 24.5" className="inventory-input" value={newProdPrice} onChange={e => setNewProdPrice(e.target.value)} />
                       </div>
 
                       <div className="inventory-input-group">
-                        <span className="inventory-input-label">Carton Qty (Box)</span>
+                        <span className="inventory-input-label">{ui.admin.fields.carton}</span>
                         <input type="number" placeholder="e.g. 80" className="inventory-input" value={newProdCarton} onChange={e => setNewProdCarton(e.target.value)} />
                       </div>
 
                       <div className="inventory-input-group">
-                        <span className="inventory-input-label">Therapeutic Use Category</span>
+                        <span className="inventory-input-label">{ui.admin.fields.category}</span>
                         <select className="inventory-input" value={newProdCategory} onChange={e => setNewProdCategory(e.target.value)}>
-                          <option value="Analgesic & Fever">Analgesic & Fever</option>
-                          <option value="Respiratory">Respiratory</option>
-                          <option value="Gastrointestinal">Gastrointestinal</option>
-                          <option value="Vitamins & Health">Vitamins & Health</option>
-                          <option value="Urinary Tract">Urinary Tract</option>
-                          <option value="Anti-infective">Anti-infective</option>
-                          <option value="Cognitive & Energy">Cognitive & Energy</option>
+                          <option value="Analgesic & Fever">{translateCategory("Analgesic & Fever")}</option>
+                          <option value="Respiratory">{translateCategory("Respiratory")}</option>
+                          <option value="Gastrointestinal">{translateCategory("Gastrointestinal")}</option>
+                          <option value="Vitamins & Health">{translateCategory("Vitamins & Health")}</option>
+                          <option value="Urinary Tract">{translateCategory("Urinary Tract")}</option>
+                          <option value="Anti-infective">{translateCategory("Anti-infective")}</option>
+                          <option value="Cognitive & Energy">{translateCategory("Cognitive & Energy")}</option>
                         </select>
                       </div>
 
                       <div className="inventory-input-group" style={{ gridColumn: 'span 2' }}>
-                        <span className="inventory-input-label">Formulation Description</span>
+                        <span className="inventory-input-label">{ui.admin.fields.description}</span>
                         <input type="text" placeholder="Describe medicine therapeutic benefits..." className="inventory-input" value={newProdDesc} onChange={e => setNewProdDesc(e.target.value)} />
                       </div>
 
                       <button type="submit" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', height: '42px', alignSelf: 'flex-end' }}>
-                        <Plus size={16} /> Scaffold & Publish
+                        <Plus size={16} /> {ui.admin.publish}
                       </button>
                     </form>
 
@@ -1721,7 +2695,7 @@ function App() {
                             <div>
                               <div className="d-flex align-center gap-2">
                                 <h4 style={{ color: 'var(--primary-light)' }}>{prod.name}</h4>
-                                {isNewProduct(prod) && <span style={{ background: 'var(--primary)', color: '#fff', fontSize: '0.6rem', padding: '0.1rem 0.3rem', borderRadius: '3px', fontWeight: 800 }}>NEW</span>}
+                                {isNewProduct(prod) && <span style={{ background: 'var(--primary)', color: '#fff', fontSize: '0.6rem', padding: '0.1rem 0.3rem', borderRadius: '3px', fontWeight: 800 }}>{ui.products.newBadge}</span>}
                               </div>
                               <span className="inventory-generic-tag">{prod.generic}</span>
                             </div>
@@ -1730,7 +2704,7 @@ function App() {
 
                           <div className="inventory-edit-row">
                             <div className="inventory-input-group">
-                              <span className="inventory-input-label">Price (AFG)</span>
+                              <span className="inventory-input-label">{ui.admin.fields.price}</span>
                               <input 
                                 type="number" 
                                 step="0.1" 
@@ -1741,7 +2715,7 @@ function App() {
                             </div>
 
                             <div className="inventory-input-group">
-                              <span className="inventory-input-label">Carton Size</span>
+                              <span className="inventory-input-label">{ui.admin.fields.carton}</span>
                               <input 
                                 type="number" 
                                 className="inventory-input"
@@ -1752,13 +2726,13 @@ function App() {
                           </div>
 
                           <div className="d-flex justify-between align-center" style={{ marginTop: '0.5rem' }}>
-                            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Packing: {prod.packing}</span>
+                            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{ui.admin.fields.packing}: {prod.packing}</span>
                             <button 
                               className={`btn ${prod.available ? 'btn-teal' : 'btn-danger'}`}
                               style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem' }}
                               onClick={() => handleToggleAvailable(prod.id)}
                             >
-                              {prod.available ? "Active" : "Disabled"}
+                              {prod.available ? ui.admin.active : ui.admin.disabled}
                             </button>
                           </div>
                         </div>
@@ -1770,15 +2744,15 @@ function App() {
                 {/* SUB-PAGE 3: EMAIL MARKETING HUB */}
                 {adminSubTab === 'marketing' && (
                   <div className="glass-panel">
-                    <h3 className="feature-title mb-4">Newsletter Broadcasting & Automated Email Hub</h3>
+                    <h3 className="feature-title mb-4">{ui.admin.marketingTitle}</h3>
                     <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-                      Cure Net is integrated with automated marketing intelligence. Subscribed provincial clinic entities receive instantaneous SMTP email dispatches when a new medicine is scaffolded or updated.
+                      {ui.admin.marketingDesc}
                     </p>
 
                     <div className="dashboard-main-grid">
                       {/* Active Subscribers Panel */}
                       <div className="glass-panel">
-                        <h4 className="mb-4" style={{ color: 'var(--primary-light)' }}>Registered Subscribers Directory</h4>
+                        <h4 className="mb-4" style={{ color: 'var(--primary-light)' }}>{ui.admin.subscribersTitle}</h4>
                         <div className="subscribers-grid">
                           {subscribers.map((email, idx) => (
                             <div key={idx} className="subscriber-card">
@@ -1786,7 +2760,7 @@ function App() {
                                 <User size={16} />
                               </div>
                               <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                <div style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.85rem' }}>Subscriber #{idx+1}</div>
+                                <div style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.85rem' }}>{ui.admin.subscriberLabel} #{idx+1}</div>
                                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{email}</div>
                               </div>
                             </div>
@@ -1797,16 +2771,16 @@ function App() {
                       {/* Broadcaster Terminal */}
                       <div>
                         <div className="glass-panel" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                          <h4 className="mb-2" style={{ color: 'var(--primary-light)' }}>Interactive SMTP Broadcasting Terminal</h4>
+                          <h4 className="mb-2" style={{ color: 'var(--primary-light)' }}>{ui.admin.terminalTitle}</h4>
                           <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
-                            Simulate launching manual newsletters regarding current clinical inventory to all registered clinics.
+                            {ui.admin.terminalDesc}
                           </p>
 
                           <div className="smtp-visualizer-container" style={{ flex: 1, minHeight: '260px', maxHeight: '350px' }}>
                             {emailMarketingLogs.length === 0 ? (
                               <div className="text-center" style={{ color: 'var(--text-muted)', paddingTop: '5rem', fontSize: '0.8rem' }}>
                                 <Mail size={32} style={{ margin: '0 auto 1rem', opacity: 0.4 }} />
-                                Terminal Idle. Scaffold a new product or trigger a broadcast simulation to view real-time SMTP telemetry logs.
+                                {ui.admin.terminalIdle}
                               </div>
                             ) : (
                               emailMarketingLogs.map((log, i) => (
@@ -1867,7 +2841,7 @@ function App() {
                               }, 80);
                             }}
                           >
-                            {isEmailMarketingActive ? "Dispatched Transmission Running..." : "Broadcast Operational Update Simulation"}
+                            {isEmailMarketingActive ? ui.admin.broadcastRunning : ui.admin.broadcastCta}
                           </button>
                         </div>
                       </div>
@@ -1880,7 +2854,7 @@ function App() {
                   <div className="dashboard-main-grid">
                     {/* Province Order Telemetry */}
                     <div className="glass-panel province-chart-panel">
-                      <h3 className="feature-title mb-4">Province Telemetry</h3>
+                      <h3 className="feature-title mb-4">{ui.admin.telemetryTitle}</h3>
                       
                       {(() => {
                         // Dynamically tally order counts per province
@@ -1897,7 +2871,7 @@ function App() {
                             <div key={prov} className="province-bar-row">
                               <div className="province-bar-info">
                                 <span>{prov}</span>
-                                <strong>{count} shipment(s)</strong>
+                                <strong>{count} {ui.admin.shipmentsSuffix}</strong>
                               </div>
                               <div className="province-bar-track">
                                 <div className="province-bar-fill" style={{ width: `${percentage}%` }} />
@@ -1912,7 +2886,7 @@ function App() {
                     <div className="glass-panel admin-ai-panel">
                       <div className="admin-ai-header d-flex align-center gap-2">
                         <Sparkles size={20} className="text-primary" />
-                        <h3 className="feature-title">Operations AI Assistant</h3>
+                        <h3 className="feature-title">{ui.admin.aiTitle}</h3>
                       </div>
 
                       <div className="admin-ai-chat" style={{ minHeight: '260px', maxHeight: '350px' }}>
@@ -1926,7 +2900,7 @@ function App() {
                       <form onSubmit={handleAdminChatSubmit} className="chat-input-row">
                         <input 
                           type="text" 
-                          placeholder="Query province metrics, stock levels..."
+                          placeholder={ui.admin.aiPlaceholder}
                           className="form-input"
                           value={adminChatInput}
                           onChange={(e) => setAdminChatInput(e.target.value)}
@@ -1952,51 +2926,51 @@ function App() {
             <div className="logo-wrapper">
               <img src="/logo.png" className="logo-img" alt="Cure Net Logo" />
               <div className="logo-text">
-                <span>CURE NET</span>
-                <span className="logo-sub">Pharmaceuticals</span>
+                <span>{t.brandName}</span>
+                <span className="logo-sub">{t.brandSub}</span>
               </div>
             </div>
             <p className="footer-desc">
-              Cure Net Pharmaceuticals is a premier MoPH-certified pharmaceutical brand in Afghanistan. Innovating healthcare manufacturing with next-level clinical solutions and country-wide dynamic logistics.
+              {ui.footer.desc}
             </p>
           </div>
 
           <div>
-            <h4 className="footer-title">Medicines Menu</h4>
+            <h4 className="footer-title">{ui.footer.menuTitle}</h4>
             <ul className="footer-links">
-              <li><span className="footer-link" onClick={() => { setActiveTab('products'); setCategoryFilter('Analgesic & Fever'); }}>Analgesics & Fever</span></li>
-              <li><span className="footer-link" onClick={() => { setActiveTab('products'); setCategoryFilter('Respiratory'); }}>Respiratory Solutions</span></li>
-              <li><span className="footer-link" onClick={() => { setActiveTab('products'); setCategoryFilter('Gastrointestinal'); }}>Gastrointestinal (Antacids)</span></li>
-              <li><span className="footer-link" onClick={() => { setActiveTab('products'); setCategoryFilter('Vitamins & Health'); }}>Multivitamins & Folate</span></li>
+              <li><span className="footer-link" onClick={() => { setActiveTab('products'); setCategoryFilter('Analgesic & Fever'); }}>{ui.footer.menu.analgesic}</span></li>
+              <li><span className="footer-link" onClick={() => { setActiveTab('products'); setCategoryFilter('Respiratory'); }}>{ui.footer.menu.respiratory}</span></li>
+              <li><span className="footer-link" onClick={() => { setActiveTab('products'); setCategoryFilter('Gastrointestinal'); }}>{ui.footer.menu.gastrointestinal}</span></li>
+              <li><span className="footer-link" onClick={() => { setActiveTab('products'); setCategoryFilter('Vitamins & Health'); }}>{ui.footer.menu.vitamins}</span></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="footer-title">Interactive Services</h4>
+            <h4 className="footer-title">{ui.footer.servicesTitle}</h4>
             <ul className="footer-links">
-              <li><span className="footer-link" onClick={() => setActiveTab('diagnostics')}>AI Diagnostics Checker</span></li>
-              <li><span className="footer-link" onClick={() => setIsCartOpen(true)}>Afghanistan Province Shipments</span></li>
-              <li><span className="footer-link" onClick={() => setActiveTab('contact')}>Enterprise Manufacturing Partnerships</span></li>
+              <li><span className="footer-link" onClick={() => setActiveTab('diagnostics')}>{ui.footer.services.diagnostics}</span></li>
+              <li><span className="footer-link" onClick={() => setIsCartOpen(true)}>{ui.footer.services.shipping}</span></li>
+              <li><span className="footer-link" onClick={() => setActiveTab('contact')}>{ui.footer.services.partnerships}</span></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="footer-title">Operational Hours</h4>
+            <h4 className="footer-title">{ui.footer.hoursTitle}</h4>
             <ul className="footer-links" style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-              <li>Saturday - Thursday: 8:00 AM - 5:00 PM</li>
-              <li>Friday: Corporate Desk Closed</li>
-              <li>Operational Emergency Contact:</li>
+              <li>{ui.footer.hours.weekdays}</li>
+              <li>{ui.footer.hours.friday}</li>
+              <li>{ui.footer.hours.emergency}</li>
               <li style={{ color: 'var(--primary-light)', fontWeight: 600 }}>+93 (0) 799 44 55 66</li>
             </ul>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <span>&copy; {new Date().getFullYear()} Cure Net Pharmaceuticals Afghanistan. All Rights Reserved. Certified GMP Manufacturer.</span>
+          <span>&copy; {new Date().getFullYear()} Cure Net Pharmaceuticals Afghanistan. {ui.footer.bottom}</span>
           <div className="d-flex gap-4">
-            <span className="footer-link" onClick={() => setActiveTab('admin')}>Staff Portal</span>
-            <span className="footer-link">WHO Compliance</span>
-            <span className="footer-link">MoPH Registry</span>
+            <span className="footer-link" onClick={() => setActiveTab('admin')}>{ui.footer.staffPortal}</span>
+            <span className="footer-link">{ui.footer.compliance}</span>
+            <span className="footer-link">{ui.footer.registry}</span>
           </div>
         </div>
       </footer>
@@ -2008,7 +2982,7 @@ function App() {
             <div className="cart-header">
               <div className="d-flex align-center gap-2">
                 <ShoppingCart size={22} className="text-primary" />
-                <h3 className="feature-title">Your Order Cart</h3>
+                <h3 className="feature-title">{ui.cart.title}</h3>
               </div>
               <button className="cart-close-btn" onClick={() => { if(!isSmtpActive) setIsCartOpen(false); }}>
                 ✕
@@ -2018,8 +2992,8 @@ function App() {
             {cart.length === 0 ? (
               <div className="ai-idle-message">
                 <ShoppingCart size={48} className="text-primary mb-4" />
-                <h4>Your Cart is Empty</h4>
-                <p style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>Browse our medicines catalog or run our AI Diagnostics checker to add products to your dispatch order.</p>
+                <h4>{ui.cart.emptyTitle}</h4>
+                <p style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>{ui.cart.emptyDesc}</p>
               </div>
             ) : (
               <>
@@ -2049,7 +3023,7 @@ function App() {
                           onClick={() => removeFromCart(item.id)}
                           disabled={isSmtpActive}
                         >
-                          Remove
+                          {ui.cart.remove}
                         </button>
                       </div>
                     </div>
@@ -2059,15 +3033,15 @@ function App() {
                 {/* Checkout Summary */}
                 <div className="cart-summary">
                   <div className="summary-row">
-                    <span>Subtotal</span>
+                    <span>{ui.cart.subtotal}</span>
                     <span>{getSubtotal().toFixed(1)} AFG</span>
                   </div>
                   <div className="summary-row">
-                    <span>Shipping to {checkoutProvince}</span>
+                    <span>{ui.cart.shippingTo} {checkoutProvince}</span>
                     <span>{getSelectedProvinceShipping()} AFG</span>
                   </div>
                   <div className="summary-row total">
-                    <span>Grand Total</span>
+                    <span>{ui.cart.total}</span>
                     <span>{getCartTotal().toFixed(1)} AFG</span>
                   </div>
                 </div>
@@ -2075,12 +3049,12 @@ function App() {
                 {/* Checkout Fields */}
                 <form onSubmit={handleCheckoutSubmit} className="checkout-form-container">
                   <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.05rem', borderBottom: '1px solid var(--border-glass)', paddingBottom: '0.5rem' }}>
-                    Secure Province Delivery Address
+                    {ui.cart.deliveryTitle}
                   </h4>
 
                   <div className="form-row">
                     <div>
-                      <label className="form-label" style={{ fontSize: '0.8rem' }}>Full Delivery Name</label>
+                      <label className="form-label" style={{ fontSize: '0.8rem' }}>{ui.cart.fullName}</label>
                       <input 
                         type="text" 
                         placeholder="e.g. Dr. Ahmad Jawed" 
@@ -2092,7 +3066,7 @@ function App() {
                       />
                     </div>
                     <div>
-                      <label className="form-label" style={{ fontSize: '0.8rem' }}>Province Selection</label>
+                      <label className="form-label" style={{ fontSize: '0.8rem' }}>{ui.cart.province}</label>
                       <select 
                         className="form-select"
                         value={checkoutProvince}
@@ -2108,7 +3082,7 @@ function App() {
 
                   <div className="form-row">
                     <div>
-                      <label className="form-label" style={{ fontSize: '0.8rem' }}>District</label>
+                      <label className="form-label" style={{ fontSize: '0.8rem' }}>{ui.cart.district}</label>
                       <input 
                         type="text" 
                         placeholder="e.g. Karte Char" 
@@ -2120,7 +3094,7 @@ function App() {
                       />
                     </div>
                     <div>
-                      <label className="form-label" style={{ fontSize: '0.8rem' }}>Street & House No.</label>
+                      <label className="form-label" style={{ fontSize: '0.8rem' }}>{ui.cart.street}</label>
                       <input 
                         type="text" 
                         placeholder="e.g. Street 4, Pharmacy Plaza" 
@@ -2134,7 +3108,7 @@ function App() {
                   </div>
 
                   <div>
-                    <label className="form-label" style={{ fontSize: '0.8rem' }}>Contact Phone Number</label>
+                    <label className="form-label" style={{ fontSize: '0.8rem' }}>{ui.cart.phone}</label>
                     <input 
                       type="tel" 
                       placeholder="e.g. 0799887766" 
@@ -2150,10 +3124,10 @@ function App() {
                   <div className="map-section">
                     <div className="map-header">
                       <span className="map-title">
-                        <Map size={14} /> High Accuracy Satellite Pinpoint
+                        <Map size={14} /> {ui.cart.mapTitle}
                       </span>
                       <span className="map-coords-badge">
-                        GPS: {gpsCoords.lat.toFixed(5)}, {gpsCoords.lng.toFixed(5)}
+                        {ui.cart.gps}: {gpsCoords.lat.toFixed(5)}, {gpsCoords.lng.toFixed(5)}
                       </span>
                     </div>
 
@@ -2167,7 +3141,7 @@ function App() {
                       onClick={handleAutoDetectLocation}
                       disabled={isSmtpActive}
                     >
-                      <Activity size={12} /> Auto-Detect Live GPS Coordinates
+                      <Activity size={12} /> {ui.cart.autodetect}
                     </button>
                   </div>
 
@@ -2181,7 +3155,7 @@ function App() {
                     </div>
                   ) : (
                     <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '0.5rem' }}>
-                      <CheckCircle size={16} /> Submit Order & Dispatch SMTP Email
+                      <CheckCircle size={16} /> {ui.cart.submit}
                     </button>
                   )}
                 </form>
@@ -2198,15 +3172,15 @@ function App() {
             <div className="success-icon-ring">
               <Check size={40} className="text-primary" />
             </div>
-            <h2 className="mb-2" style={{ color: 'var(--primary-light)' }}>Order Successfully Transmitted!</h2>
-            <h4 className="mb-6" style={{ color: 'var(--text-secondary)' }}>Secure Transaction Code: #CNP-{lastPlacedOrderId}</h4>
+            <h2 className="mb-2" style={{ color: 'var(--primary-light)' }}>{ui.cart.successTitle}</h2>
+            <h4 className="mb-6" style={{ color: 'var(--text-secondary)' }}>{ui.cart.successCode}: #CNP-{lastPlacedOrderId}</h4>
             
             <p style={{ fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '2rem' }}>
-              Salam! Your order has been securely processed. A detailed SMTP email alert was dispatched to our Kabul headquarters at <strong style={{ color: 'var(--text-primary)' }}>orders@curenetpharmaceuticals.com</strong>. Our logistics fleet is compiling your province delivery pack. Keep your phone active!
+              {ui.cart.successDesc} <strong style={{ color: 'var(--text-primary)' }}>orders@curenetpharmaceuticals.com</strong>
             </p>
 
             <button className="btn btn-primary" onClick={() => setShowCheckoutSuccess(false)}>
-              Acknowledge & Close
+              {ui.cart.close}
             </button>
           </div>
         </div>

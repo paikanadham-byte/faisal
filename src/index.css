@@ -2100,14 +2100,45 @@ html {
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(22, 119, 200, 0.08), transparent 34%),
-    radial-gradient(circle at top right, rgba(15, 157, 117, 0.1), transparent 30%),
-    linear-gradient(180deg, #ffffff 0%, #f7fafc 48%, #f3f7fb 100%);
+    radial-gradient(circle at 12% 16%, rgba(22, 119, 200, 0.12), transparent 18%),
+    radial-gradient(circle at 88% 12%, rgba(15, 157, 117, 0.12), transparent 20%),
+    radial-gradient(circle at 50% 100%, rgba(22, 119, 200, 0.05), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #f8fbfe 52%, #f3f8fc 100%);
   background-size: auto;
   background-position: center top;
-  background-attachment: scroll;
+  background-attachment: fixed;
   background-blend-mode: normal;
   color: var(--text-primary);
+  position: relative;
+  isolation: isolate;
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 999px;
+  filter: blur(10px);
+}
+
+body::before {
+  inset: 6rem auto auto -5rem;
+  width: 22rem;
+  height: 22rem;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(22, 119, 200, 0.12), transparent 55%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(22, 119, 200, 0.05));
+}
+
+body::after {
+  inset: auto -4rem 8rem auto;
+  width: 24rem;
+  height: 24rem;
+  background:
+    radial-gradient(circle at 60% 40%, rgba(15, 157, 117, 0.14), transparent 55%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(15, 157, 117, 0.05));
 }
 
 h1,
@@ -2480,35 +2511,65 @@ h1 {
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: space-between;
+  gap: 1rem;
   color: var(--text-primary);
 }
 
+.product-visual-topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.product-visual-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 3.5rem;
+}
+
 .product-visual svg {
-  margin-top: auto;
+  margin: 0;
 }
 
 .product-visual-pill,
 .product-visual-generic-name {
   display: inline-flex;
   align-items: center;
-  border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.04em;
 }
 
+.product-badge,
 .product-visual-pill {
   padding: 0.32rem 0.68rem;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.7);
   color: var(--text-primary);
+  position: static;
+  top: auto;
+  left: auto;
+  max-width: 100%;
+  white-space: normal;
+  line-height: 1.35;
 }
 
 .product-visual-generic-name {
   padding: 0.24rem 0.56rem;
+  border-radius: 16px;
   background: rgba(17, 32, 51, 0.06);
   color: var(--text-secondary);
+  align-self: stretch;
+  justify-content: center;
+  text-align: center;
+  white-space: normal;
+  line-height: 1.35;
 }
 
 .product-visual-emerald { background: linear-gradient(145deg, #ecfbf5, #dff5eb); }
