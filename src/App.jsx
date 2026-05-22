@@ -931,10 +931,7 @@ function App() {
           <div className="logo-wrapper" onClick={() => { setActiveTab('home'); setIsMobileMenuOpen(false); }}>
             <img src="/logo.png" className="logo-img" alt="Cure Net Logo" />
             <div className="logo-text">
-              <span className="d-flex align-center gap-2">
-                {TRANSLATIONS[lang].brandName}
-                <span className="logo-persian" style={{ fontSize: '0.75rem', opacity: 0.85 }}>({TRANSLATIONS[lang].persianName})</span>
-              </span>
+              <span>{TRANSLATIONS[lang].brandName}</span>
               <span className="logo-sub">{TRANSLATIONS[lang].brandSub}</span>
             </div>
           </div>
@@ -1011,9 +1008,16 @@ function App() {
                 <div className="hero-brand-panel">
                   <div className="hero-brand-orb hero-brand-orb-1" />
                   <div className="hero-brand-orb hero-brand-orb-2" />
-                  <div className="hero-brand-layout">
-                    <div className="hero-brand-logo-wrap">
-                      <img src="/logo.png" className="hero-brand-logo" alt="Cure Net Logo" />
+                  <div className="hero-brand-layout hero-brand-layout-single">
+                    <div className="hero-brand-content">
+                      <span className="hero-brand-kicker">{TRANSLATIONS[lang].brandSub}</span>
+                      <div className="hero-brand-wordmark">
+                        <span>{TRANSLATIONS[lang].brandName}</span>
+                        <strong>CNP</strong>
+                      </div>
+                      <p className="hero-brand-copy">
+                        Clean manufacturing presentation, stronger product visibility, and dependable nationwide delivery.
+                      </p>
                     </div>
                     <div className="hero-brand-stats">
                       <div className="hero-badge hero-badge-clean">
@@ -1143,7 +1147,7 @@ function App() {
                 <div className="hero-visual">
                   <div className="hero-brand-panel hero-brand-panel-secondary">
                     <div className="hero-brand-orb hero-brand-orb-3" />
-                    <div className="showcase-copy">
+                    <div className="showcase-copy showcase-copy-enhanced">
                       <div className="showcase-kicker">Batch Monitoring</div>
                       <h3>Clear production flow</h3>
                       <p>From raw ingredient checks to dispatch review, every stage is presented in a cleaner, brighter interface.</p>

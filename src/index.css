@@ -2254,8 +2254,11 @@ h1 {
 .hero-brand-panel {
   position: relative;
   min-height: 100%;
-  padding: 2rem;
-  background: linear-gradient(145deg, rgba(240, 248, 255, 0.96), rgba(229, 244, 240, 0.95));
+  padding: 2.2rem;
+  background:
+    radial-gradient(circle at top left, rgba(22, 119, 200, 0.14), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(15, 157, 117, 0.16), transparent 34%),
+    linear-gradient(145deg, rgba(240, 248, 255, 0.98), rgba(229, 244, 240, 0.96));
 }
 
 .hero-brand-panel-secondary {
@@ -2263,7 +2266,9 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  background: linear-gradient(145deg, rgba(247, 251, 255, 0.98), rgba(233, 245, 255, 0.94));
+  background:
+    radial-gradient(circle at top right, rgba(22, 119, 200, 0.12), transparent 30%),
+    linear-gradient(145deg, rgba(247, 251, 255, 0.99), rgba(233, 245, 255, 0.95));
 }
 
 .hero-brand-layout {
@@ -2276,23 +2281,78 @@ h1 {
   height: 100%;
 }
 
-.hero-brand-logo-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.hero-brand-layout-single {
+  grid-template-columns: 1fr;
+  align-content: center;
+  gap: 1.75rem;
 }
 
-.hero-brand-logo {
-  width: min(100%, 320px);
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 24px 32px rgba(17, 119, 200, 0.08));
+.hero-brand-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  text-align: center;
+  padding: 0.75rem 1rem 0.25rem;
 }
 
 .hero-brand-stats,
 .showcase-metrics {
   display: grid;
   gap: 1rem;
+}
+
+.hero-brand-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.hero-brand-kicker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--secondary);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid rgba(17, 32, 51, 0.08);
+}
+
+.hero-brand-wordmark {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.hero-brand-wordmark span,
+.hero-brand-wordmark strong {
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+}
+
+.hero-brand-wordmark span {
+  font-size: clamp(2.7rem, 6vw, 4.8rem);
+  font-weight: 800;
+  color: #123151;
+}
+
+.hero-brand-wordmark strong {
+  font-size: clamp(4rem, 8vw, 6.8rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #1677c8, #0f9d75);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-brand-copy {
+  max-width: 32rem;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.7;
 }
 
 .hero-brand-orb {
@@ -2303,16 +2363,16 @@ h1 {
 
 .hero-brand-orb-1 {
   inset: 14% auto auto 8%;
-  width: 120px;
-  height: 120px;
-  background: rgba(22, 119, 200, 0.08);
+  width: 180px;
+  height: 180px;
+  background: rgba(22, 119, 200, 0.1);
 }
 
 .hero-brand-orb-2 {
-  inset: auto 9% 12% auto;
-  width: 168px;
-  height: 168px;
-  background: rgba(15, 157, 117, 0.1);
+  inset: auto 5% 8% auto;
+  width: 220px;
+  height: 220px;
+  background: rgba(15, 157, 117, 0.11);
 }
 
 .hero-brand-orb-3 {
@@ -2327,19 +2387,21 @@ h1 {
 .showcase-metric {
   position: relative;
   z-index: 1;
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(17, 32, 51, 0.08);
-  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
   box-shadow: var(--shadow-sm);
 }
 
 .hero-badge-clean {
   border-color: rgba(15, 157, 117, 0.2);
+  min-height: 100%;
 }
 
 .hero-stat-card,
 .showcase-metric {
-  padding: 1rem 1.1rem;
+  padding: 1.05rem 1.15rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
@@ -2363,6 +2425,15 @@ h1 {
   max-width: 28rem;
 }
 
+.showcase-copy-enhanced {
+  padding: 1.35rem 1.4rem;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-sm);
+}
+
 .showcase-kicker,
 .product-category-tag {
   display: inline-flex;
@@ -2378,6 +2449,14 @@ h1 {
 
 .product-category-tag {
   margin-bottom: 0.85rem;
+}
+
+.logo-sub {
+  margin-top: 0.15rem;
+}
+
+.logo-persian {
+  display: none;
 }
 
 .clean-highlight-section {
@@ -2567,7 +2646,7 @@ h1 {
     grid-template-columns: 1fr;
   }
 
-  .hero-brand-logo {
-    width: min(100%, 260px);
+  .hero-brand-stats {
+    grid-template-columns: 1fr;
   }
 }
