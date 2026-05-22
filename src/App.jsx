@@ -17,15 +17,12 @@ import {
   Send, 
   Check, 
   CheckCircle, 
-  AlertCircle, 
   Map, 
   Settings, 
   Layers, 
   ChevronRight, 
-  Info, 
   Lock,
   ArrowRight,
-  RefreshCw,
   ShieldCheck
 } from 'lucide-react';
 
@@ -494,7 +491,7 @@ const UI_COPY = {
     cart: {
       title: "Your Order Cart",
       emptyTitle: "Your Cart is Empty",
-      emptyDesc: "Browse the catalog or use diagnostics to add products to your order.",
+      emptyDesc: "Browse the catalog to add products to your order.",
       remove: "Remove",
       subtotal: "Subtotal",
       shippingTo: "Shipping to",
@@ -716,7 +713,7 @@ const UI_COPY = {
     cart: {
       title: "سبد سفارش شما",
       emptyTitle: "سبد شما خالی است",
-      emptyDesc: "از کاتالوگ دیدن کنید یا از تشخیص هوشمند برای افزودن محصول استفاده نمایید.",
+      emptyDesc: "از کاتالوگ دیدن کنید تا محصولات را به سفارش خود اضافه نمایید.",
       remove: "حذف",
       subtotal: "جمع فرعی",
       shippingTo: "هزینه ارسال به",
@@ -938,7 +935,7 @@ const UI_COPY = {
     cart: {
       title: "ستاسې د سفارش ټوکرۍ",
       emptyTitle: "ټوکرۍ مو تشه ده",
-      emptyDesc: "کتالوګ وګورئ یا له تشخیصي برخې څخه محصول اضافه کړئ.",
+      emptyDesc: "کتالوګ وګورئ او محصولات خپل سفارش ته اضافه کړئ.",
       remove: "لرې کول",
       subtotal: "فرعي ټول",
       shippingTo: "د لېږد بیه تر",
@@ -1203,7 +1200,7 @@ const INITIAL_ORDERS = [
 ];
 
 function App() {
-  // Navigation Tabs: 'home' | 'products' | 'diagnostics' | 'contact' | 'admin'
+  // Navigation Tabs: 'home' | 'products' | 'contact' | 'admin'
   const [activeTab, setActiveTab] = useState('home');
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
@@ -1257,12 +1254,6 @@ function App() {
   const [cart, setCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Diagnostics Tab State
-  const [selectedDiagnostic, setSelectedDiagnostic] = useState(null);
-  const [customSymptomInput, setCustomSymptomInput] = useState('');
-  const [aiAnalysisResult, setAiAnalysisResult] = useState(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-
   // Checkout Form State
   const [checkoutName, setCheckoutName] = useState('');
   const [checkoutProvince, setCheckoutProvince] = useState('Kabul');
@@ -1306,7 +1297,6 @@ function App() {
   const ui = UI_COPY[lang];
   const isRtl = lang !== 'en';
   const translateCategory = (category) => CATEGORY_LABELS[lang]?.[category] || category;
-  const getDiagnosticCopy = (diagnosticId) => DIAGNOSTIC_COPY[lang]?.[diagnosticId] || DIAGNOSTIC_COPY.en[diagnosticId];
   const getLocalizedStatus = (status) => ui.admin.status[status] || status;
   const getLocalizedProduct = (product) => {
     if (lang === 'en') return product;
@@ -1512,57 +1502,6 @@ function App() {
     return match ? match.shippingCost : 150;
   };
   const getCartTotal = () => getSubtotal() + getSelectedProvinceShipping();
-
-  // AI Diagnostics keyword matching
-  const handleAISymptomSubmit = (e) => {
-    if (e) e.preventDefault();
-    if (!customSymptomInput.trim() && !selectedDiagnostic) return;
-
-    setIsAnalyzing(true);
-    
-    // Simulate high-performance diagnostic analysis
-    setTimeout(() => {
-      let match = null;
-      const text = customSymptomInput.toLowerCase();
-      
-      if (selectedDiagnostic) {
-        match = CLINICAL_DIAGNOSTICS.find(d => d.id === selectedDiagnostic);
-      } else {
-        // Evaluate keywords
-        if (text.includes("fever") || text.includes("temperature") || text.includes("cold") || text.includes("ache") || text.includes("pain") || text.includes("headache")) {
-          match = CLINICAL_DIAGNOSTICS.find(d => d.id === "fever");
-        } else if (text.includes("cough") || text.includes("throat") || text.includes("tickle") || text.includes("dry")) {
-          match = CLINICAL_DIAGNOSTICS.find(d => d.id === "dry_cough");
-        } else if (text.includes("acid") || text.includes("heartburn") || text.includes("gastritis") || text.includes("reflux") || text.includes("bloat")) {
-          match = CLINICAL_DIAGNOSTICS.find(d => d.id === "stomach_acid");
-        } else if (text.includes("breath") || text.includes("asthma") || text.includes("wheez") || text.includes("chest") || text.includes("copd")) {
-          match = CLINICAL_DIAGNOSTICS.find(d => d.id === "asthma");
-        } else if (text.includes("urine") || text.includes("burning") || text.includes("uti") || text.includes("urinate")) {
-          match = CLINICAL_DIAGNOSTICS.find(d => d.id === "uti");
-        } else if (text.includes("diarrhea") || text.includes("infection") || text.includes("parasite") || text.includes("stomach infect")) {
-          match = CLINICAL_DIAGNOSTICS.find(d => d.id === "infection");
-        } else if (text.includes("fatigue") || text.includes("weak") || text.includes("tired") || text.includes("anemia") || text.includes("iron")) {
-          match = CLINICAL_DIAGNOSTICS.find(d => d.id === "fatigue");
-        } else {
-          // Default fallbacks to Multivitamins and Health boosters
-          match = CLINICAL_DIAGNOSTICS.find(d => d.id === "fatigue");
-        }
-      }
-
-      if (match) {
-        const matchedProducts = products.filter(p => match.medicines.includes(p.id));
-        const diagnosticCopy = getDiagnosticCopy(match.id);
-        setAiAnalysisResult({
-          disease: diagnosticCopy.disease,
-          description: diagnosticCopy.description,
-          confidence: diagnosticCopy.confidence,
-          recommendedProducts: matchedProducts
-        });
-      }
-
-      setIsAnalyzing(false);
-    }, 1200);
-  };
 
   // Checkout submission with live SMTP Visualizer
   const handleCheckoutSubmit = (e) => {
@@ -1926,9 +1865,6 @@ function App() {
             <span className={`nav-item ${activeTab === 'products' ? 'active' : ''}`} onClick={() => { setActiveTab('products'); setIsMobileMenuOpen(false); }}>
               {TRANSLATIONS[lang].products}
             </span>
-            <span className={`nav-item ${activeTab === 'diagnostics' ? 'active' : ''}`} onClick={() => { setActiveTab('diagnostics'); setIsMobileMenuOpen(false); }}>
-              {TRANSLATIONS[lang].symptomChecker}
-            </span>
             <span className={`nav-item ${activeTab === 'contact' ? 'active' : ''}`} onClick={() => { setActiveTab('contact'); setIsMobileMenuOpen(false); }}>
               {TRANSLATIONS[lang].contactUs}
             </span>
@@ -1958,9 +1894,6 @@ function App() {
                 <div className="hero-buttons" style={{ justifyContent: isRtl ? 'flex-end' : 'flex-start' }}>
                   <button className="btn btn-primary" onClick={() => setActiveTab('products')}>
                     {t.browseBtn} <ArrowRight size={16} style={{ transform: isRtl ? 'rotate(180deg)' : 'none' }} />
-                  </button>
-                  <button className="btn btn-secondary" onClick={() => setActiveTab('diagnostics')}>
-                    {t.diagnosticsBtn} <Sparkles size={16} />
                   </button>
                 </div>
               </div>
@@ -2081,14 +2014,6 @@ function App() {
                   </div>
                   <h3 className="feature-title">{ui.home.features.formulationsTitle}</h3>
                   <p className="feature-desc">{ui.home.features.formulationsDesc}</p>
-                </div>
-
-                <div className="feature-card" onClick={() => setActiveTab('diagnostics')}>
-                  <div className="feature-icon-wrapper" style={{ color: '#0d9488', background: 'rgba(13, 148, 136, 0.08)' }}>
-                    <Sparkles size={22} />
-                  </div>
-                  <h3 className="feature-title">{ui.home.features.aiTitle}</h3>
-                  <p className="feature-desc">{ui.home.features.aiDesc}</p>
                 </div>
 
                 <div className="feature-card" onClick={() => setIsCartOpen(true)}>
@@ -2248,144 +2173,7 @@ function App() {
           </section>
         )}
 
-        {/* Tab 3: AI DIAGNOSTICS & SYMPTOM CHECKER */}
-        {activeTab === 'diagnostics' && (
-          <section className="content-section">
-            <div className="section-title-wrapper">
-              <span className="section-subtitle">{ui.diagnostics.subtitle}</span>
-              <h2>{ui.diagnostics.title}</h2>
-              <p>{ui.diagnostics.desc}</p>
-            </div>
-
-            <div className="ai-recommend-container">
-              {/* Form Input Side */}
-              <div className="glass-panel ai-form-side">
-                <div>
-                  <h3 className="feature-title mb-2">{ui.diagnostics.selectorTitle}</h3>
-                  <p style={{ fontSize: '0.85rem' }}>{ui.diagnostics.selectorDesc}</p>
-                </div>
-
-                <div className="symptom-tag-container">
-                  {CLINICAL_DIAGNOSTICS.map(item => {
-                    const diagnosticCopy = getDiagnosticCopy(item.id);
-                    return (
-                    <span 
-                      key={item.id}
-                      className={`symptom-tag ${selectedDiagnostic === item.id ? 'active' : ''}`}
-                      onClick={() => {
-                        setSelectedDiagnostic(item.id);
-                        setCustomSymptomInput('');
-                      }}
-                    >
-                      {diagnosticCopy.label}
-                    </span>
-                    );
-                  })}
-                </div>
-
-                <form onSubmit={handleAISymptomSubmit}>
-                  <div className="mb-4">
-                    <label className="form-label">{ui.diagnostics.detailedSymptoms}</label>
-                    <textarea 
-                      rows={3} 
-                      className="form-textarea"
-                      placeholder={ui.diagnostics.inputPlaceholder}
-                      value={customSymptomInput}
-                      onChange={(e) => {
-                        setCustomSymptomInput(e.target.value);
-                        setSelectedDiagnostic(null);
-                      }}
-                    />
-                  </div>
-
-                  <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
-                    <Sparkles size={16} /> {ui.diagnostics.analyze}
-                  </button>
-                </form>
-
-                <div style={{ background: 'rgba(245, 158, 11, 0.05)', border: '1px solid rgba(245, 158, 11, 0.2)', padding: '1rem', borderRadius: '8px', fontSize: '0.75rem', color: 'var(--accent)' }}>
-                  <div className="d-flex align-center gap-2 mb-2" style={{ fontWeight: 700 }}>
-                    <AlertCircle size={16} /> {ui.diagnostics.disclaimerTitle}
-                  </div>
-                  {ui.diagnostics.disclaimer}
-                </div>
-              </div>
-
-              {/* Diagnostic Results Side */}
-              <div className="glass-panel ai-recommendation-panel">
-                <div className="ai-diagnostics-header">
-                  <div className={isAnalyzing ? "ai-status-pulse" : "ai-status-pulse"} style={{ backgroundColor: isAnalyzing ? '#f59e0b' : '#10b981' }} />
-                  <span className="ai-status-text">
-                    {isAnalyzing ? ui.diagnostics.running : ui.diagnostics.active}
-                  </span>
-                </div>
-
-                {isAnalyzing ? (
-                  <div className="ai-idle-message">
-                    <RefreshCw size={40} className="text-primary mb-4" style={{ animation: 'spin 2s linear infinite' }} />
-                    <h4>{ui.diagnostics.loadingTitle}</h4>
-                    <p style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>{ui.diagnostics.loadingDesc}</p>
-                  </div>
-                ) : aiAnalysisResult ? (
-                  <div className="ai-diagnostics-result">
-                    <div className="ai-disease-card">
-                      <div className="disease-name">
-                        {aiAnalysisResult.disease}
-                        <span className="disease-confidence">{aiAnalysisResult.confidence} {ui.diagnostics.confidenceSuffix}</span>
-                      </div>
-                      <p className="disease-description">{aiAnalysisResult.description}</p>
-                    </div>
-
-                    <h4 className="mb-2" style={{ fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05rem', color: 'var(--text-primary)' }}>
-                      {ui.diagnostics.recommendedTitle}
-                    </h4>
-                    
-                    <div className="recommended-medicines-list">
-                      {aiAnalysisResult.recommendedProducts.map(med => {
-                        const localizedMed = getLocalizedProduct(med);
-                        return (
-                        <div key={localizedMed.id} className="recommended-med-item">
-                          <div>
-                            <h4 style={{ color: 'var(--primary-light)' }}>{localizedMed.name}</h4>
-                            <span className="inventory-generic-tag">{localizedMed.generic} • {localizedMed.packing}</span>
-                            <p className="med-meta-desc">{localizedMed.description}</p>
-                            <div className="med-caution">
-                              <Info size={12} /> {localizedMed.caution}
-                            </div>
-                          </div>
-                          <div className="text-center" style={{ minWidth: '100px' }}>
-                            <div className="product-price" style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>{localizedMed.price.toFixed(1)} AFG</div>
-                            
-                            {localizedMed.available ? (
-                              <button 
-                                className="btn btn-teal" 
-                                style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
-                                onClick={() => addToCart(localizedMed)}
-                              >
-                                <Plus size={12} /> {ui.diagnostics.order}
-                              </button>
-                            ) : (
-                              <span style={{ fontSize: '0.75rem', color: '#ef4444' }}>{ui.products.outOfStock}</span>
-                            )}
-                          </div>
-                        </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="ai-idle-message">
-                    <Activity size={48} className="text-primary mb-4" />
-                    <h4>{ui.diagnostics.idleTitle}</h4>
-                    <p style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>{ui.diagnostics.idleDesc}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Tab 4: CONTACT US PAGE */}
+        {/* Tab 3: CONTACT US PAGE */}
         {activeTab === 'contact' && (
           <section className="content-section">
             <div className="section-title-wrapper">
@@ -2945,7 +2733,6 @@ function App() {
           <div>
             <h4 className="footer-title">{ui.footer.servicesTitle}</h4>
             <ul className="footer-links">
-              <li><span className="footer-link" onClick={() => setActiveTab('diagnostics')}>{ui.footer.services.diagnostics}</span></li>
               <li><span className="footer-link" onClick={() => setIsCartOpen(true)}>{ui.footer.services.shipping}</span></li>
               <li><span className="footer-link" onClick={() => setActiveTab('contact')}>{ui.footer.services.partnerships}</span></li>
             </ul>
