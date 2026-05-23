@@ -18,6 +18,7 @@ import {
   Check, 
   CheckCircle, 
   Map, 
+  Globe,
   Settings, 
   Layers, 
   ChevronRight, 
@@ -1230,6 +1231,19 @@ function App() {
   // Mobile navigation hamburger toggle
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Language Dropdown State
+  const langDropdownRef = useRef(null);
+  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (langDropdownRef.current && !langDropdownRef.current.contains(event.target)) {
+        setIsLangDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   // Subscriber List for automatic simulated marketing emails
   const [subscribers, setSubscribers] = useState(() => {
     const local = localStorage.getItem('cnp_subscribers');
@@ -1837,10 +1851,21 @@ function App() {
           
           {/* Language Switcher & Hamburger Button */}
           <div className="d-flex align-center gap-4">
-            <div className="lang-switcher">
-              <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => setLang('en')}>EN</button>
-              <button className={`lang-btn ${lang === 'da' ? 'active' : ''}`} onClick={() => setLang('da')}>دری</button>
-              <button className={`lang-btn ${lang === 'ps' ? 'active' : ''}`} onClick={() => setLang('ps')}>پشتو</button>
+            <div className="lang-dropdown-wrapper" ref={langDropdownRef}>
+              <button 
+                className={`lang-icon-btn ${isLangDropdownOpen ? 'active' : ''}`} 
+                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)} 
+                title="Change Language"
+              >
+                <Globe size={20} />
+              </button>
+              {isLangDropdownOpen && (
+                <div className="lang-dropdown-menu">
+                  <button className={`lang-dropdown-item ${lang === 'en' ? 'active' : ''}`} onClick={() => { setLang('en'); setIsLangDropdownOpen(false); }}>English (EN)</button>
+                  <button className={`lang-dropdown-item ${lang === 'da' ? 'active' : ''}`} onClick={() => { setLang('da'); setIsLangDropdownOpen(false); }}>دری (DA)</button>
+                  <button className={`lang-dropdown-item ${lang === 'ps' ? 'active' : ''}`} onClick={() => { setLang('ps'); setIsLangDropdownOpen(false); }}>پشتو (PS)</button>
+                </div>
+              )}
             </div>
 
             <button className="cart-icon-btn" onClick={() => setIsCartOpen(true)} title={ui.cart.title}>
