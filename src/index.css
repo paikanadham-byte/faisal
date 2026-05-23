@@ -60,15 +60,6 @@ html {
 
 body {
   background-color: var(--bg-primary);
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.06) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(13, 148, 136, 0.06) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(17, 24, 39, 0.5) 0px, transparent 50%),
-    url('/pharma-bg.png');
-  background-size: auto, auto, auto, cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-blend-mode: normal, normal, normal, soft-light;
   min-height: 100vh;
   line-height: 1.6;
   overflow-x: hidden;
@@ -146,21 +137,7 @@ p {
   position: relative;
 }
 
-.app-container::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  background:
-    radial-gradient(circle at 18% 22%, rgba(22, 119, 200, 0.11) 0 0.4rem, transparent 0.45rem 100%),
-    radial-gradient(circle at 78% 30%, rgba(15, 157, 117, 0.11) 0 0.5rem, transparent 0.55rem 100%),
-    radial-gradient(circle at 34% 72%, rgba(22, 119, 200, 0.08) 0 0.32rem, transparent 0.36rem 100%),
-    radial-gradient(circle at 66% 82%, rgba(15, 157, 117, 0.08) 0 0.38rem, transparent 0.42rem 100%),
-    linear-gradient(120deg, transparent 0 47%, rgba(22, 119, 200, 0.06) 47.4%, transparent 47.8%),
-    linear-gradient(300deg, transparent 0 50%, rgba(15, 157, 117, 0.055) 50.4%, transparent 50.8%);
-  opacity: 0.9;
-}
+
 
 .content-section {
   padding: 5rem 2rem;
@@ -2175,9 +2152,7 @@ html {
 
 body {
   background-color: var(--bg-primary);
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),
-    url('/pharma-bg.png');
+  background-image: url('/pharma-bg.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
