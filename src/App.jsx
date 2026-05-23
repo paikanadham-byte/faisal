@@ -1828,7 +1828,7 @@ function App() {
       <header className="navbar" style={{ direction: isRtl ? 'rtl' : 'ltr' }}>
         <div className="navbar-container">
           <div className="logo-wrapper" onClick={() => { setActiveTab('home'); setIsMobileMenuOpen(false); }}>
-            <img src="/logo.png" className="logo-img" alt="Cure Net Logo" />
+            <img src="/logo-transparent.png" className="logo-img" alt="Cure Net Logo" />
             <div className="logo-text">
               <span>{TRANSLATIONS[lang].brandName}</span>
               <span className="logo-sub">{TRANSLATIONS[lang].brandSub}</span>
@@ -1904,7 +1904,7 @@ function App() {
                   <div className="hero-brand-layout hero-brand-layout-single">
                     <div className="hero-brand-content">
                       <span className="hero-brand-kicker">{t.brandSub}</span>
-                      <img src="/logo.png" alt="Cure Net logo" className="hero-brand-logo" />
+                      <img src="/logo-transparent.png" alt="Cure Net logo" className="hero-brand-logo" />
                       <p className="hero-brand-copy">
                         {ui.home.heroBrandCopy}
                       </p>
@@ -2030,26 +2030,12 @@ function App() {
             <section className="content-section clean-highlight-section" style={{ maxWidth: '100%' }}>
               <div className="hero-section clean-highlight-wrap" style={{ padding: '2rem max(2rem, (100% - 1280px)/2)' }}>
                 <div className="hero-visual">
-                  <div className="hero-brand-panel hero-brand-panel-secondary">
-                    <div className="hero-brand-orb hero-brand-orb-3" />
-                    <div className="showcase-copy showcase-copy-enhanced">
-                      <div className="showcase-kicker">{ui.home.showcase.kicker}</div>
-                      <h3>{ui.home.showcase.title}</h3>
-                      <p>{ui.home.showcase.desc}</p>
+                  <div className="showcase-images-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', height: '100%', minHeight: '300px' }}>
+                    <div style={{ position: 'relative', height: '100%' }}>
+                      <img src="/lab_1.png" className="hero-img" style={{ borderRadius: '24px', objectFit: 'cover', width: '100%', height: '100%', boxShadow: 'var(--shadow-md)' }} alt="Pharmaceutical Lab" />
                     </div>
-                    <div className="showcase-metrics">
-                      <div className="showcase-metric">
-                        <span>{ui.home.showcase.metrics.tests}</span>
-                        <strong>{ui.home.showcase.metrics.verified}</strong>
-                      </div>
-                      <div className="showcase-metric">
-                        <span>{ui.home.showcase.metrics.packaging}</span>
-                        <strong>{ui.home.showcase.metrics.ready}</strong>
-                      </div>
-                      <div className="showcase-metric">
-                        <span>{ui.home.showcase.metrics.dispatch}</span>
-                        <strong>{ui.home.showcase.metrics.live}</strong>
-                      </div>
+                    <div style={{ position: 'relative', height: '100%' }}>
+                      <img src="/lab_2.png" className="hero-img" style={{ borderRadius: '24px', objectFit: 'cover', width: '100%', height: '100%', boxShadow: 'var(--shadow-md)' }} alt="Manufacturing" />
                     </div>
                   </div>
                 </div>
@@ -2709,7 +2695,7 @@ function App() {
         <div className="footer-container">
           <div className="footer-brand">
             <div className="logo-wrapper">
-              <img src="/logo.png" className="logo-img" alt="Cure Net Logo" />
+              <img src="/logo-transparent.png" className="logo-img" alt="Cure Net Logo" />
               <div className="logo-text">
                 <span>{t.brandName}</span>
                 <span className="logo-sub">{t.brandSub}</span>
